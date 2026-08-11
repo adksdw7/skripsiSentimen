@@ -780,31 +780,8 @@ if not selected_apps:
     st.stop()
 
 
-# Latar belakang Hasil Analisis mengikuti model yang aktif.
-analysis_background = (
-    "#fffff0"
-    if st.session_state["model_pilihan"] == "NBC"
-    else "#f3efe0"
-)
-
-st.markdown(
-    f"""
-    <style>
-        .st-key-hasil_analisis_area {{
-            background: {analysis_background} !important;
-            border-radius: 18px !important;
-            padding: 0.35rem 0.75rem 1.4rem 0.75rem !important;
-            margin-top: 0.25rem !important;
-            transition: background-color 0.2s ease;
-        }}
-
-        .st-key-hasil_analisis_area > div {{
-            background: transparent !important;
-        }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# Area Hasil Analisis mengikuti background utama dashboard.
+# Tidak ada background tambahan atau background khusus per model.
 
 with st.container(key="hasil_analisis_area"):
     st.markdown("---")
@@ -861,7 +838,7 @@ with st.container(key="hasil_analisis_area"):
             }}
 
             .st-key-model_svm button {{
-                background-color: #faf0e6 !important;
+                background-color: #fffff0 !important;
                 color: #111111 !important;
                 border: 2px solid {svm_border} !important;
                 border-radius: 8px !important;
