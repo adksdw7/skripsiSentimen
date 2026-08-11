@@ -786,6 +786,22 @@ with st.container(key="info_periode"):
     st.info("Data yang disajikan merupakan ulasan pengguna selama periode 1 Juni 2025 hingga 31 Mei 2026")
 
 
+# Total data ulasan aplikasi yang dipilih
+# Jumlah Data Preparation NBC dan SVM sama, sehingga total ulasan tidak bergantung pada model.
+col_u = st.columns(len(selected_apps))
+for idx, app_name in enumerate(selected_apps):
+    with col_u[idx]:
+        app_total = len(
+            df_sentimen_nbc[
+                df_sentimen_nbc["appName"] == app_name
+            ]
+        )
+        st.markdown(
+            f'<div class="metric-card"><h2 style="margin:0;color:{APP_COLOR_MAP[app_name]};">{app_total:,}</h2><p style="margin:5px 0 0 0;color:gray;font-size:14px;">Total Ulasan {app_name}</p></div>',
+            unsafe_allow_html=True
+        )
+
+
 # Pilih model klasifikasi
 model_sebelum = st.session_state["model_pilihan"]
 
@@ -864,19 +880,6 @@ else:
     df_evaluasi = df_evaluasi_svm.copy()
     nama_model = "SVM"
 
-
-# Total data ulasan
-
-col_u = st.columns(len(selected_apps))
-for idx, app_name in enumerate(selected_apps):
-    with col_u[idx]:
-        app_total = len(df_sentimen[df_sentimen['appName'] == app_name])
-        st.markdown(
-            f'<div class="metric-card"><h2 style="margin:0;color:{APP_COLOR_MAP[app_name]};">{app_total:,}</h2><p style="margin:5px 0 0 0;color:gray;font-size:14px;">Total Ulasan {app_name}</p></div>',
-            unsafe_allow_html=True
-        )
-
-
 st.markdown("---")
 # Diagram donat
 judul_bagian("Proporsi Distribusi Sentimen Pengguna", "proporsi-sentimen")
@@ -886,7 +889,13 @@ for idx, app_name in enumerate(selected_apps):
     with col_pie[idx]:
         with st.container(border=True):
             df_app_sent = df_sentimen[df_sentimen['appName'] == app_name]
-            df_chart_pie = df_app_sent['sentimen'].value_counts().reset_index()
+            df_chart_pie = (
+                df_app_sent['sentimen']
+                .value_counts()
+                .reindex(['Positif', 'Negatif'], fill_value=0)
+                .rename_axis('sentimen')
+                .reset_index(name='count')
+            )
 
             fig_pie = px.pie(
                 df_chart_pie, values='count', names='sentimen', hole=0.4,
@@ -899,8 +908,16 @@ for idx, app_name in enumerate(selected_apps):
                 height=280,
                 margin=dict(t=55, b=70, l=20, r=20),
                 font=dict(size=12),
-                legend=dict(orientation="h", yanchor="bottom", y=-0.2, xanchor="center", x=0.5)
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=-0.2,
+                    xanchor="center",
+                    x=0.5,
+                    traceorder="normal"
+                )
             )
+            fig_pie.update_traces(sort=False)
             st.plotly_chart(fig_pie, use_container_width=True, config=PLOTLY_CONFIG)
 
 
@@ -912,21 +929,48 @@ for idx, app_name in enumerate(selected_apps):
                 neg_pct = (neg_count / total_app_review) * 100
                 color_code = APP_COLOR_MAP.get(app_name, "#2377ca")
 
-                col_neg, col_pos = st.columns(2)
-                with col_neg:
-                    st.markdown(f'''
-                    <div style="text-align:center;">
-                        <h2 style="margin:0; color:{color_code}; font-size: clamp(18px, 2.2vw, 30px); font-weight: bold;">{neg_pct:.1f}%</h2>
-                        <p style="margin:2px 0 0 0; color: gray; font-size: 13px;">Sentimen Negatif</p>
+                # Urutan pembacaan dikunci: Positif di kiri, Negatif di kanan.
+                # Satu blok HTML dipakai agar urutan tidak berubah oleh layout Streamlit.
+                st.markdown(
+                    f"""
+                    <div style="
+                        display:flex;
+                        width:100%;
+                        align-items:flex-start;
+                        justify-content:space-between;
+                        gap:16px;
+                        margin-top:4px;
+                    ">
+                        <div style="flex:1; text-align:center;">
+                            <h2 style="
+                                margin:0;
+                                color:{color_code};
+                                font-size:clamp(18px, 2.2vw, 30px);
+                                font-weight:bold;
+                            ">{pos_pct:.1f}%</h2>
+                            <p style="
+                                margin:2px 0 0 0;
+                                color:gray;
+                                font-size:13px;
+                            ">Sentimen Positif</p>
+                        </div>
+                        <div style="flex:1; text-align:center;">
+                            <h2 style="
+                                margin:0;
+                                color:{color_code};
+                                font-size:clamp(18px, 2.2vw, 30px);
+                                font-weight:bold;
+                            ">{neg_pct:.1f}%</h2>
+                            <p style="
+                                margin:2px 0 0 0;
+                                color:gray;
+                                font-size:13px;
+                            ">Sentimen Negatif</p>
+                        </div>
                     </div>
-                    ''', unsafe_allow_html=True)
-                with col_pos:
-                    st.markdown(f'''
-                    <div style="text-align:center;">
-                        <h2 style="margin:0; color:{color_code}; font-size: clamp(18px, 2.2vw, 30px); font-weight: bold;">{pos_pct:.1f}%</h2>
-                        <p style="margin:2px 0 0 0; color: gray; font-size: 13px;">Sentimen Positif</p>
-                    </div>
-                    ''', unsafe_allow_html=True)
+                    """,
+                    unsafe_allow_html=True
+                )
 
 
 st.markdown("---")
