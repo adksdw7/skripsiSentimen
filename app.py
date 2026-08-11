@@ -779,35 +779,84 @@ if not selected_apps:
     st.warning("⚠️ Silakan pilih minimal satu aplikasi E-Wallet")
     st.stop()
 
-
 st.markdown("---")
 judul_bagian("Hasil Analisis", "hasil-analisis")
+
 with st.container(key="info_periode"):
-    st.info("Data yang disajikan merupakan ulasan pengguna selama periode 1 Juni 2025 hingga 31 Mei 2026")
+    st.info(
+        "Data yang disajikan merupakan ulasan pengguna selama periode "
+        "1 Juni 2025 hingga 31 Mei 2026"
+    )
+
 
 # Total data ulasan
+# Jumlah preparation NBC dan SVM sama, sehingga total data
+# dapat ditampilkan sebelum pengguna memilih model.
 col_u = st.columns(len(selected_apps))
+
 for idx, app_name in enumerate(selected_apps):
     with col_u[idx]:
-        app_total = len(df_sentimen[df_sentimen['appName'] == app_name])
+        app_total = len(
+            df_sentimen_nbc[
+                df_sentimen_nbc["appName"] == app_name
+            ]
+        )
+
         st.markdown(
-            f'<div class="metric-card"><h2 style="margin:0;color:{APP_COLOR_MAP[app_name]};">{app_total:,}</h2><p style="margin:5px 0 0 0;color:gray;font-size:14px;">Total Ulasan {app_name}</p></div>',
+            f"""
+            <div class="metric-card">
+                <h2 style="
+                    margin:0;
+                    color:{APP_COLOR_MAP[app_name]};
+                ">
+                    {app_total:,}
+                </h2>
+
+                <p style="
+                    margin:5px 0 0 0;
+                    color:gray;
+                    font-size:14px;
+                ">
+                    Total Ulasan {app_name}
+                </p>
+            </div>
+            """,
             unsafe_allow_html=True
         )
 
-st.markdown("---")
 
 # Pilih model klasifikasi
 model_sebelum = st.session_state["model_pilihan"]
 
-nbc_border = "#2377ca" if model_sebelum == "NBC" else "#d7dce2"
-svm_border = "#ff773c" if model_sebelum == "SVM" else "#d7dce2"
-nbc_shadow = "0 7px 18px rgba(35,119,202,0.18)" if model_sebelum == "NBC" else "none"
-svm_shadow = "0 7px 18px rgba(255,119,60,0.18)" if model_sebelum == "SVM" else "none"
+nbc_border = (
+    "#2377ca"
+    if model_sebelum == "NBC"
+    else "#d7dce2"
+)
+
+svm_border = (
+    "#ff773c"
+    if model_sebelum == "SVM"
+    else "#d7dce2"
+)
+
+nbc_shadow = (
+    "0 7px 18px rgba(35,119,202,0.18)"
+    if model_sebelum == "NBC"
+    else "none"
+)
+
+svm_shadow = (
+    "0 7px 18px rgba(255,119,60,0.18)"
+    if model_sebelum == "SVM"
+    else "none"
+)
+
 
 st.markdown(
     f"""
     <style>
+
         .st-key-model_nbc button {{
             background-color: #fffff0 !important;
             color: #111111 !important;
@@ -837,12 +886,17 @@ st.markdown(
         .st-key-model_svm button:hover {{
             border-color: #ff773c !important;
         }}
+
     </style>
     """,
     unsafe_allow_html=True
 )
 
-_, col_model_nbc, col_model_svm, _ = st.columns([2.2, 1, 1, 2.2])
+
+_, col_model_nbc, col_model_svm, _ = st.columns(
+    [2.2, 1, 1, 2.2]
+)
+
 
 with col_model_nbc:
     if st.button(
@@ -854,6 +908,7 @@ with col_model_nbc:
             st.session_state["model_pilihan"] = "NBC"
             st.rerun()
 
+
 with col_model_svm:
     if st.button(
         "Model SVM",
@@ -864,16 +919,22 @@ with col_model_svm:
             st.session_state["model_pilihan"] = "SVM"
             st.rerun()
 
+
+# Tentukan data berdasarkan model yang dipilih
 model_aktif = st.session_state["model_pilihan"]
 
 if model_aktif == "NBC":
     df_sentimen = df_sentimen_nbc.copy()
     df_evaluasi = df_evaluasi_nbc.copy()
     nama_model = "Multinomial NBC"
+
 else:
     df_sentimen = df_sentimen_svm.copy()
     df_evaluasi = df_evaluasi_svm.copy()
     nama_model = "SVM"
+
+
+st.markdown("---")
 
 # Diagram donat
 judul_bagian("Proporsi Distribusi Sentimen Pengguna", "proporsi-sentimen")
