@@ -785,6 +785,17 @@ judul_bagian("Hasil Analisis", "hasil-analisis")
 with st.container(key="info_periode"):
     st.info("Data yang disajikan merupakan ulasan pengguna selama periode 1 Juni 2025 hingga 31 Mei 2026")
 
+# Total data ulasan
+col_u = st.columns(len(selected_apps))
+for idx, app_name in enumerate(selected_apps):
+    with col_u[idx]:
+        app_total = len(df_sentimen[df_sentimen['appName'] == app_name])
+        st.markdown(
+            f'<div class="metric-card"><h2 style="margin:0;color:{APP_COLOR_MAP[app_name]};">{app_total:,}</h2><p style="margin:5px 0 0 0;color:gray;font-size:14px;">Total Ulasan {app_name}</p></div>',
+            unsafe_allow_html=True
+        )
+
+st.markdown("---")
 
 # Pilih model klasifikasi
 model_sebelum = st.session_state["model_pilihan"]
@@ -864,20 +875,6 @@ else:
     df_evaluasi = df_evaluasi_svm.copy()
     nama_model = "SVM"
 
-
-# Total data ulasan
-
-col_u = st.columns(len(selected_apps))
-for idx, app_name in enumerate(selected_apps):
-    with col_u[idx]:
-        app_total = len(df_sentimen[df_sentimen['appName'] == app_name])
-        st.markdown(
-            f'<div class="metric-card"><h2 style="margin:0;color:{APP_COLOR_MAP[app_name]};">{app_total:,}</h2><p style="margin:5px 0 0 0;color:gray;font-size:14px;">Total Ulasan {app_name}</p></div>',
-            unsafe_allow_html=True
-        )
-
-
-st.markdown("---")
 # Diagram donat
 judul_bagian("Proporsi Distribusi Sentimen Pengguna", "proporsi-sentimen")
 
