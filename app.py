@@ -842,7 +842,7 @@ with st.container(key="hasil_analisis_area"):
     model_sebelum = st.session_state["model_pilihan"]
 
     nbc_border = "#2377ca" if model_sebelum == "NBC" else "#d7dce2"
-    svm_border = "#ff773c" if model_sebelum == "SVM" else "#d7dce2"
+    svm_border = "#2377ca" if model_sebelum == "SVM" else "#d7dce2"
     nbc_shadow = "0 7px 18px rgba(35,119,202,0.18)" if model_sebelum == "NBC" else "none"
     svm_shadow = "0 7px 18px rgba(255,119,60,0.18)" if model_sebelum == "SVM" else "none"
 
@@ -876,7 +876,7 @@ with st.container(key="hasil_analisis_area"):
             }}
 
             .st-key-model_svm button:hover {{
-                border-color: #ff773c !important;
+                border-color: #2377ca !important;
             }}
         </style>
         """,
