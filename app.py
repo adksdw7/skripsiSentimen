@@ -1275,15 +1275,31 @@ with st.container(key="hasil_analisis_area"):
             color: #111111;
             font-size: clamp(11px, 0.9vw, 14px);
             font-weight: 700;
-            margin: 2px 0 7px 0;
+            margin: 0 0 9px 0;
+        }
+
+        /* Isi panel metrik selalu berada di tengah secara vertikal.
+           Saat aplikasi bertambah, susunan tetap menyesuaikan di tengah panel. */
+        .eval-cards-content {
+            min-height: 365px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-sizing: border-box;
+        }
+
+        .eval-app-block {
+            width: 100%;
+            margin: 8px 0;
         }
 
         .eval-metric-grid {
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
-            gap: 7px;
+            gap: 8px;
             width: 100%;
-            margin-bottom: 12px;
+            margin: 0 auto;
         }
 
         .eval-metric-card {
@@ -1292,9 +1308,15 @@ with st.container(key="hasil_analisis_area"):
             border-top: 3px solid var(--metric-color);
             border-radius: 9px;
             min-width: 0;
-            padding: 10px 5px;
+            min-height: 78px;
+            padding: 9px 5px;
             text-align: center;
             box-shadow: 0 3px 9px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
         }
 
         .eval-metric-label {
@@ -1303,6 +1325,7 @@ with st.container(key="hasil_analisis_area"):
             font-size: clamp(8px, 0.65vw, 11px);
             line-height: 1.2;
             white-space: nowrap;
+            text-align: center;
         }
 
         .eval-metric-value {
@@ -1312,6 +1335,7 @@ with st.container(key="hasil_analisis_area"):
             font-weight: 800;
             line-height: 1.2;
             white-space: nowrap;
+            text-align: center;
         }
 
         .eval-note {
@@ -1329,6 +1353,10 @@ with st.container(key="hasil_analisis_area"):
         }
 
         @media (max-width: 900px) {
+            .eval-cards-content {
+                min-height: auto;
+            }
+
             .eval-metric-grid {
                 grid-template-columns: repeat(5, minmax(82px, 1fr));
                 overflow-x: auto;
@@ -1352,7 +1380,8 @@ with st.container(key="hasil_analisis_area"):
     ]
 
     # Bagian atas: diagram batang interaktif + kartu metrik per aplikasi
-    col_eval_chart, col_eval_cards = st.columns([1.55, 1], gap="medium")
+    # Kedua panel dibuat sama lebar.
+    col_eval_chart, col_eval_cards = st.columns([1, 1], gap="medium")
 
     with col_eval_chart:
         with st.container(border=True):
@@ -1456,6 +1485,10 @@ with st.container(key="hasil_analisis_area"):
                 unsafe_allow_html=True
             )
 
+            # Seluruh isi aplikasi dibuat sebagai satu blok agar dapat
+            # dipusatkan secara vertikal di dalam panel kanan.
+            eval_apps_html = '<div class="eval-cards-content">'
+
             for app_name in selected_apps:
                 row_eval = df_eval_selected[
                     df_eval_selected["aplikasi"] == app_name
@@ -1467,11 +1500,6 @@ with st.container(key="hasil_analisis_area"):
                 row_eval = row_eval.iloc[0]
                 app_color = APP_COLOR_MAP[app_name]
 
-                st.markdown(
-                    f'<div class="eval-app-title">Metrik Evaluasi: {app_name}</div>',
-                    unsafe_allow_html=True
-                )
-
                 metric_cards = "".join(
                     f'<div class="eval-metric-card" style="--metric-color:{app_color};">'
                     f'<p class="eval-metric-label">{metric_name}</p>'
@@ -1480,10 +1508,19 @@ with st.container(key="hasil_analisis_area"):
                     for metric_name in metric_order
                 )
 
-                st.markdown(
-                    f'<div class="eval-metric-grid">{metric_cards}</div>',
-                    unsafe_allow_html=True
+                eval_apps_html += (
+                    f'<div class="eval-app-block">'
+                    f'<div class="eval-app-title">Metrik Evaluasi: {app_name}</div>'
+                    f'<div class="eval-metric-grid">{metric_cards}</div>'
+                    f'</div>'
                 )
+
+            eval_apps_html += '</div>'
+
+            st.markdown(
+                eval_apps_html,
+                unsafe_allow_html=True
+            )
 
     # Jarak antara ringkasan evaluasi dan confusion matrix
     st.markdown('<div style="height:10px;"></div>', unsafe_allow_html=True)
