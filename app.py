@@ -1417,6 +1417,246 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ------------------------------------------------------------
+# 3G. FINAL SIDEBAR + EQUAL PANEL HEIGHT FIX
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* =======================================================
+       SIDEBAR
+       ======================================================= */
+    [data-testid="stSidebar"],
+    [data-testid="stSidebarContent"] {
+        background: #FFF2DB !important;
+    }
+
+    /* Hilangkan seluruh isi ikon bawaan Streamlit */
+    [data-testid="stSidebarCollapseButton"] span,
+    [data-testid="stSidebarCollapsedControl"] span,
+    button[data-testid="stSidebarCollapseButton"] span,
+    button[data-testid="stSidebarCollapsedControl"] span,
+    button[aria-label="Close sidebar"] span,
+    button[aria-label="Open sidebar"] span {
+        display: none !important;
+        visibility: hidden !important;
+        font-size: 0 !important;
+    }
+
+    /* Juga sembunyikan teks material yang kadang muncul sebagai
+       keyboard_double_arrow_right / keyboard_double_arrow_left */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"],
+    button[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+    button[data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"] {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        height: 0 !important;
+        overflow: hidden !important;
+    }
+
+    /* Bentuk tombol */
+    [data-testid="stSidebarCollapseButton"] button,
+    [data-testid="stSidebarCollapsedControl"] button,
+    button[data-testid="stSidebarCollapseButton"],
+    button[data-testid="stSidebarCollapsedControl"],
+    button[aria-label="Close sidebar"],
+    button[aria-label="Open sidebar"] {
+        position: relative !important;
+        min-width: 42px !important;
+        width: 42px !important;
+        height: 36px !important;
+        padding: 0 !important;
+        border: none !important;
+        outline: none !important;
+        box-shadow: none !important;
+        background: rgba(255,250,243,.70) !important;
+        border-radius: 9px !important;
+    }
+
+    /* SIDEBAR TERBUKA -> tombol menutup = << */
+    [data-testid="stSidebarCollapseButton"] button::after,
+    button[data-testid="stSidebarCollapseButton"]::after,
+    button[aria-label="Close sidebar"]::after {
+        content: "<<" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #9D6638 !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        letter-spacing: -3px !important;
+    }
+
+    /* SIDEBAR TERTUTUP -> tombol membuka = >> */
+    [data-testid="stSidebarCollapsedControl"] button::after,
+    button[data-testid="stSidebarCollapsedControl"]::after,
+    button[aria-label="Open sidebar"]::after {
+        content: ">>" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #9D6638 !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        letter-spacing: -3px !important;
+    }
+
+    /* Fallback bila Streamlit menaruh pseudo pada wrapper, bukan button */
+    [data-testid="stSidebarCollapseButton"]:not(:has(button))::after {
+        content: "<<" !important;
+        color: #9D6638 !important;
+        font-size: 22px !important;
+        font-weight: 800 !important;
+    }
+
+    [data-testid="stSidebarCollapsedControl"]:not(:has(button))::after {
+        content: ">>" !important;
+        color: #9D6638 !important;
+        font-size: 22px !important;
+        font-weight: 800 !important;
+    }
+
+    /* =======================================================
+       KOLOM DALAM SATU BARIS HARUS STRETCH
+       ======================================================= */
+    .block-container [data-testid="stHorizontalBlock"] {
+        align-items: stretch !important;
+    }
+
+    .block-container [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+        display: flex !important;
+        flex-direction: column !important;
+        align-self: stretch !important;
+        min-width: 0 !important;
+    }
+
+    .block-container [data-testid="stHorizontalBlock"] > [data-testid="stColumn"]
+    > [data-testid="stVerticalBlock"] {
+        flex: 1 1 auto !important;
+        height: 100% !important;
+    }
+
+    /* =======================================================
+       PANEL ROW 1
+       Rating / Tren Positif / Tren Negatif
+       ======================================================= */
+    [class*="st-key-panel_row1_"] {
+        height: 100% !important;
+    }
+
+    [class*="st-key-panel_row1_"] [data-testid="stVerticalBlockBorderWrapper"] {
+        min-height: 405px !important;
+        height: 100% !important;
+        padding: 18px 18px 20px 18px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* =======================================================
+       PANEL ROW 2
+       Distribusi NBC / Distribusi SVM / Ringkasan Distribusi
+       SEMUA SAMA TINGGI
+       ======================================================= */
+    [class*="st-key-panel_row2_"] {
+        height: 100% !important;
+    }
+
+    [class*="st-key-panel_row2_"] [data-testid="stVerticalBlockBorderWrapper"] {
+        min-height: 555px !important;
+        height: 100% !important;
+        padding: 20px 18px 26px 18px !important;
+        box-sizing: border-box !important;
+        overflow: visible !important;
+    }
+
+    [class*="st-key-panel_row2_"] [data-testid="stVerticalBlock"] {
+        min-height: 100% !important;
+    }
+
+    /* ruang bawah mini card positif/negatif */
+    [class*="st-key-panel_row2_"] .sentiment-mini-grid {
+        margin-top: 2px !important;
+        margin-bottom: 8px !important;
+    }
+
+    [class*="st-key-panel_row2_"] .sentiment-mini {
+        min-height: 84px !important;
+        padding: 13px 8px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Ringkasan distribusi ditaruh lebih seimbang di tengah */
+    [class*="st-key-panel_row2_summary_"] [data-testid="stVerticalBlock"] {
+        justify-content: center !important;
+    }
+
+    /* =======================================================
+       PANEL ROW 3
+       Confusion NBC / Confusion SVM / Ringkasan Tren
+       SEMUA SAMA TINGGI
+       ======================================================= */
+    [class*="st-key-panel_row3_"] {
+        height: 100% !important;
+    }
+
+    [class*="st-key-panel_row3_"] [data-testid="stVerticalBlockBorderWrapper"] {
+        min-height: 430px !important;
+        height: 100% !important;
+        padding: 20px 18px 22px 18px !important;
+        box-sizing: border-box !important;
+    }
+
+    [class*="st-key-panel_row3_summary_"] [data-testid="stVerticalBlock"] {
+        justify-content: center !important;
+    }
+
+    /* =======================================================
+       PANEL ROW 4
+       Diagram Metrik / Perbandingan Kinerja
+       SEMUA SAMA TINGGI
+       ======================================================= */
+    [class*="st-key-panel_row4_"] {
+        height: 100% !important;
+    }
+
+    [class*="st-key-panel_row4_"] [data-testid="stVerticalBlockBorderWrapper"] {
+        min-height: 410px !important;
+        height: 100% !important;
+        padding: 20px 18px 22px 18px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* Plot harus mengisi lebar panel */
+    [data-testid="stPlotlyChart"],
+    [data-testid="stPlotlyChart"] > div {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    @media (max-width: 900px) {
+        [class*="st-key-panel_row1_"] [data-testid="stVerticalBlockBorderWrapper"],
+        [class*="st-key-panel_row2_"] [data-testid="stVerticalBlockBorderWrapper"],
+        [class*="st-key-panel_row3_"] [data-testid="stVerticalBlockBorderWrapper"],
+        [class*="st-key-panel_row4_"] [data-testid="stVerticalBlockBorderWrapper"] {
+            min-height: auto !important;
+            height: auto !important;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -1954,17 +2194,17 @@ for selected_app in APP_ORDER:
     row1 = st.columns([1, 1, 1], gap="medium")
 
     with row1[0]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row1_rating_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Distribusi Rating NBC & SVM</div>', unsafe_allow_html=True)
             st.plotly_chart(rating_figure(nbc_app, svm_app), use_container_width=True, config=PLOTLY_CONFIG)
 
     with row1[1]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row1_positive_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Tren Sentimen Positif</div>', unsafe_allow_html=True)
             st.plotly_chart(trend_figure(nbc_app, svm_app, "Positif"), use_container_width=True, config=PLOTLY_CONFIG)
 
     with row1[2]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row1_negative_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Tren Sentimen Negatif</div>', unsafe_allow_html=True)
             st.plotly_chart(trend_figure(nbc_app, svm_app, "Negatif"), use_container_width=True, config=PLOTLY_CONFIG)
 
