@@ -577,7 +577,7 @@ label_evaluasi_sidebar = (
 
 NAV_ITEMS = [
     ("Pilih E-Wallet", "pilih-e-wallet"),
-    ("Pilih Model", "hasil-analisis"),
+    ("Hasil Analisis", "hasil-analisis"),
     ("Pilih Model", "pilih-model"),
     ("Proporsi Distribusi Sentimen Pengguna", "proporsi-sentimen"),
     ("Grafik Tren Perkembangan Sentimen Bulanan", "tren-sentimen"),
@@ -1376,6 +1376,15 @@ with st.container(key="hasil_analisis_area"):
             line-height: 1.45;
         }
 
+        .st-key-confusion_matrix_note_panel {
+            width: 100%;
+            margin-top: -2px;
+        }
+
+        .st-key-confusion_matrix_note_panel [data-testid="stVerticalBlockBorderWrapper"] {
+            padding: 0 !important;
+        }
+
         @media (max-width: 900px) {
             .st-key-eval_chart_panel [data-testid="stVerticalBlockBorderWrapper"],
             .st-key-eval_cards_panel [data-testid="stVerticalBlockBorderWrapper"] {
@@ -1551,10 +1560,17 @@ with st.container(key="hasil_analisis_area"):
                     }
                 )
 
-    st.markdown(
-        '<div class="eval-note">Warna lebih pekat menunjukkan klasifikasi benar (TP dan TN), sedangkan warna lebih muda menunjukkan kesalahan klasifikasi (FP dan FN).</div>',
-        unsafe_allow_html=True
-    )
+
+
+    # Catatan confusion matrix ditampilkan satu kali di dalam area panel matrix.
+    with st.container(border=True, key="confusion_matrix_note_panel"):
+        st.markdown(
+            '<div class="eval-note" style="margin:0 auto; border:none; background:transparent;">'
+            'Warna lebih pekat menunjukkan klasifikasi benar (TP dan TN), '
+            'sedangkan warna lebih muda menunjukkan kesalahan klasifikasi (FP dan FN).'
+            '</div>',
+            unsafe_allow_html=True
+        )
 
     # Jarak antara confusion matrix dan ringkasan evaluasi
     st.markdown(
