@@ -1278,10 +1278,28 @@ with st.container(key="hasil_analisis_area"):
             margin: 0 0 9px 0;
         }
 
+        /* Panel kiri dan kanan dipaksa memiliki ukuran visual yang sama.
+           Tinggi outer panel dikontrol lewat key Streamlit di bawah. */
+        .st-key-eval_chart_panel [data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-eval_cards_panel [data-testid="stVerticalBlockBorderWrapper"] {
+            height: 520px !important;
+            min-height: 520px !important;
+            max-height: 520px !important;
+            box-sizing: border-box !important;
+        }
+
+        .st-key-eval_chart_panel [data-testid="stVerticalBlockBorderWrapper"] > div,
+        .st-key-eval_cards_panel [data-testid="stVerticalBlockBorderWrapper"] > div {
+            height: 100% !important;
+            box-sizing: border-box !important;
+        }
+
         /* Isi panel metrik selalu berada di tengah secara vertikal.
-           Saat aplikasi bertambah, susunan tetap menyesuaikan di tengah panel. */
+           1, 2, atau 3 aplikasi tetap berada di tengah panel yang sama tinggi. */
         .eval-cards-content {
-            min-height: 390px;
+            height: 430px;
+            min-height: 430px;
+            max-height: 430px;
             width: 100%;
             display: flex;
             flex-direction: column;
@@ -1353,8 +1371,17 @@ with st.container(key="hasil_analisis_area"):
         }
 
         @media (max-width: 900px) {
+            .st-key-eval_chart_panel [data-testid="stVerticalBlockBorderWrapper"],
+            .st-key-eval_cards_panel [data-testid="stVerticalBlockBorderWrapper"] {
+                height: auto !important;
+                min-height: 0 !important;
+                max-height: none !important;
+            }
+
             .eval-cards-content {
-                min-height: auto;
+                height: auto;
+                min-height: 0;
+                max-height: none;
             }
 
             .eval-metric-grid {
@@ -1384,7 +1411,7 @@ with st.container(key="hasil_analisis_area"):
     col_eval_chart, col_eval_cards = st.columns([1, 1], gap="medium")
 
     with col_eval_chart:
-        with st.container(border=True):
+        with st.container(border=True, key="eval_chart_panel"):
             st.markdown(
                 f'<div class="eval-panel-title">Perbandingan Metrik Evaluasi {nama_model}</div>',
                 unsafe_allow_html=True
@@ -1439,7 +1466,7 @@ with st.container(key="hasil_analisis_area"):
 
             fig_eval_bar.update_layout(
                 autosize=True,
-                height=390,
+                height=420,
                 margin=dict(t=25, b=45, l=55, r=20),
                 paper_bgcolor="rgba(0,0,0,0)",
                 plot_bgcolor="rgba(0,0,0,0)",
@@ -1479,7 +1506,7 @@ with st.container(key="hasil_analisis_area"):
             )
 
     with col_eval_cards:
-        with st.container(border=True):
+        with st.container(border=True, key="eval_cards_panel"):
             st.markdown(
                 '<div class="eval-panel-title">Metrik Evaluasi per Aplikasi</div>',
                 unsafe_allow_html=True
