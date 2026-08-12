@@ -1689,10 +1689,11 @@ st.markdown(
     }
 
     .performance-score-line {
-        font-size: 8px;
-        line-height: 1.35;
+        font-size: 11px;
+        line-height: 1.45;
         color: #9D6638;
         white-space: nowrap;
+        font-weight: 500;
     }
 
     .performance-winner-caption {
