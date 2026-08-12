@@ -1519,6 +1519,113 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ------------------------------------------------------------
+# 3G. TOP NAVIGATION + SIDEBAR SYMBOL FINAL FIX
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* Top navigation/header dashboard */
+    [data-testid="stHeader"] {
+        background: #FFF2DB !important;
+    }
+
+    /* =======================================================
+       HILANGKAN MATERIAL TEXT:
+       double_arrow_right / double_arrow_left
+       ======================================================= */
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarCollapseButton"],
+    button[data-testid="stSidebarCollapsedControl"],
+    button[data-testid="stSidebarCollapseButton"] {
+        position: relative !important;
+        font-size: 0 !important;
+        color: transparent !important;
+        text-indent: -9999px !important;
+        overflow: hidden !important;
+    }
+
+    [data-testid="stSidebarCollapsedControl"] *,
+    [data-testid="stSidebarCollapseButton"] *,
+    button[data-testid="stSidebarCollapsedControl"] *,
+    button[data-testid="stSidebarCollapseButton"] *,
+    button[aria-label="Open sidebar"] *,
+    button[aria-label="Close sidebar"] * {
+        font-size: 0 !important;
+        color: transparent !important;
+        visibility: hidden !important;
+        text-indent: -9999px !important;
+        overflow: hidden !important;
+    }
+
+    /* Tombol pembuka sidebar: >> */
+    [data-testid="stSidebarCollapsedControl"]::after,
+    button[data-testid="stSidebarCollapsedControl"]::after,
+    button[aria-label="Open sidebar"]::after {
+        content: ">>" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        visibility: visible !important;
+        text-indent: 0 !important;
+        overflow: visible !important;
+        color: #9D6638 !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 23px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        letter-spacing: -3px !important;
+        z-index: 9999 !important;
+        pointer-events: none !important;
+    }
+
+    /* Tombol penutup sidebar: << */
+    [data-testid="stSidebarCollapseButton"]::after,
+    button[data-testid="stSidebarCollapseButton"]::after,
+    button[aria-label="Close sidebar"]::after {
+        content: "<<" !important;
+        position: absolute !important;
+        inset: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        visibility: visible !important;
+        text-indent: 0 !important;
+        overflow: visible !important;
+        color: #9D6638 !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 23px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        letter-spacing: -3px !important;
+        z-index: 9999 !important;
+        pointer-events: none !important;
+    }
+
+    /* Ukuran area klik tetap nyaman */
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="stSidebarCollapseButton"],
+    button[data-testid="stSidebarCollapsedControl"],
+    button[data-testid="stSidebarCollapseButton"],
+    button[aria-label="Open sidebar"],
+    button[aria-label="Close sidebar"] {
+        min-width: 44px !important;
+        width: 44px !important;
+        min-height: 38px !important;
+        height: 38px !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -1787,17 +1894,19 @@ def confusion_figure(row_eval, model_name):
     tn, fp, fn, tp = [int(row_eval[k]) for k in ["TN", "FP", "FN", "TP"]]
     model_color = MODEL_COLOR[model_name]
 
+    # Warna teks dibuat kontras terhadap warna sel:
+    # - Sel benar (TN/TP) lebih pekat -> teks terang
+    # - Sel salah (FP/FN) lebih muda -> teks gelap
+    light_text = "#FFFAF3"
+    dark_text = NBC_NEG if model_name == "NBC" else SVM_NEG
+
     # Baris = actualLabel, kolom = predictLabel
-    # Intensitas warna dibuat berdasarkan benar/salah, bukan besarnya angka.
     fig = go.Figure(
         go.Heatmap(
             z=[[1.0, 0.28], [0.28, 1.0]],
             x=["negatif", "positif"],
             y=["negatif", "positif"],
-            text=[[f"{tn}<br>TN", f"{fp}<br>FP"], [f"{fn}<br>FN", f"{tp}<br>TP"]],
             customdata=[[tn, fp], [fn, tp]],
-            texttemplate="<b>%{text}</b>",
-            textfont=dict(size=13, color=TEXT),
             colorscale=(
                 [
                     [0.00, "#FFFAF3"],
@@ -1818,9 +1927,49 @@ def confusion_figure(row_eval, model_name):
             showscale=False,
             xgap=3,
             ygap=3,
-            hovertemplate="actualLabel: %{y}<br>predictLabel: %{x}<br>Jumlah: %{customdata:,}<extra></extra>",
+            hovertemplate=(
+                "actualLabel: %{y}<br>"
+                "predictLabel: %{x}<br>"
+                "Jumlah: %{customdata:,}"
+                "<extra></extra>"
+            ),
         )
     )
+
+    # Annotation per sel memungkinkan warna teks berbeda-beda.
+    annotations = [
+        dict(
+            x="negatif", y="negatif",
+            text=f"<b>{tn}<br>TN</b>",
+            font=dict(size=13, color=light_text),
+        ),
+        dict(
+            x="positif", y="negatif",
+            text=f"<b>{fp}<br>FP</b>",
+            font=dict(size=13, color=dark_text),
+        ),
+        dict(
+            x="negatif", y="positif",
+            text=f"<b>{fn}<br>FN</b>",
+            font=dict(size=13, color=dark_text),
+        ),
+        dict(
+            x="positif", y="positif",
+            text=f"<b>{tp}<br>TP</b>",
+            font=dict(size=13, color=light_text),
+        ),
+    ]
+
+    for annotation in annotations:
+        fig.add_annotation(
+            x=annotation["x"],
+            y=annotation["y"],
+            text=annotation["text"],
+            showarrow=False,
+            align="center",
+            font=annotation["font"],
+        )
+
     fig.update_layout(
         xaxis_title="predictLabel",
         yaxis_title="actualLabel",
@@ -1828,7 +1977,6 @@ def confusion_figure(row_eval, model_name):
     )
     fig.update_yaxes(autorange="reversed")
     return plot_theme(fig, height=295, margin=dict(l=55, r=16, t=16, b=55))
-
 
 def performance_figure(row_nbc, row_svm):
     records = []
