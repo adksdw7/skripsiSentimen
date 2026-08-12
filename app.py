@@ -1329,6 +1329,94 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ------------------------------------------------------------
+# 3F. SIDEBAR ICON + UNIFORM VISUAL ROW WIDTH
+# HANYA UI, tidak mengubah fungsi data/chart
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* =========================================
+       SIDEBAR COLLAPSE / EXPAND SYMBOL
+       Tutup sidebar = <<
+       Buka sidebar  = >>
+       ========================================= */
+
+    /* Hilangkan glyph Material bawaan */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
+    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"],
+    button[aria-label="Close sidebar"] [data-testid="stIconMaterial"],
+    button[aria-label="Open sidebar"] [data-testid="stIconMaterial"] {
+        font-size: 0 !important;
+        width: auto !important;
+        min-width: 24px !important;
+        overflow: visible !important;
+    }
+
+    /* Saat sidebar terbuka: tombol menutup = << */
+    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"]::before,
+    button[aria-label="Close sidebar"] [data-testid="stIconMaterial"]::before {
+        content: "<<" !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 21px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        color: #9D6638 !important;
+        letter-spacing: -2px !important;
+    }
+
+    /* Saat sidebar tertutup: tombol membuka = >> */
+    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"]::before,
+    button[aria-label="Open sidebar"] [data-testid="stIconMaterial"]::before {
+        content: ">>" !important;
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
+        font-size: 21px !important;
+        font-weight: 800 !important;
+        line-height: 1 !important;
+        color: #9D6638 !important;
+        letter-spacing: -2px !important;
+    }
+
+    /* Tombol sidebar tetap compact dan rapi */
+    [data-testid="stSidebarCollapseButton"] button,
+    [data-testid="stSidebarCollapsedControl"] button,
+    button[aria-label="Close sidebar"],
+    button[aria-label="Open sidebar"] {
+        border: none !important;
+        box-shadow: none !important;
+        color: #9D6638 !important;
+    }
+
+    /* =========================================
+       KONSISTENSI BARIS VISUALISASI
+       Lebar ditentukan sama oleh st.columns.
+       Padding setiap panel dibuat konsisten.
+       ========================================= */
+    .block-container [data-testid="stHorizontalBlock"] {
+        align-items: stretch !important;
+    }
+
+    .block-container [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
+        min-width: 0 !important;
+    }
+
+    /* Panel chart punya padding kiri-kanan yang sama */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        box-sizing: border-box !important;
+    }
+
+    /* Plot selalu mengisi lebar panel masing-masing */
+    [data-testid="stPlotlyChart"],
+    [data-testid="stPlotlyChart"] > div {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -1818,11 +1906,6 @@ with st.sidebar:
         for app in selected_apps
     )
     st.markdown(links, unsafe_allow_html=True)
-    st.markdown(
-        '<div class="nav-hint">Navigasi hanya menampilkan aplikasi yang sedang aktif. '
-        'Jika lebih dari satu aplikasi dipilih, dashboard tetap disusun DANA → GoPay → ShopeePay.</div>',
-        unsafe_allow_html=True,
-    )
 
 # ------------------------------------------------------------
 # 8. DASHBOARD PER APLIKASI
@@ -1868,7 +1951,7 @@ for selected_app in APP_ORDER:
     # --------------------------------------------------------
     # ROW 1: Rating | Tren Positif | Tren Negatif
     # --------------------------------------------------------
-    row1 = st.columns([1.0, 1.28, 1.28], gap="medium")
+    row1 = st.columns([1, 1, 1], gap="medium")
 
     with row1[0]:
         with st.container(border=True):
