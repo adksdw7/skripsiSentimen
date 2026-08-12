@@ -719,12 +719,21 @@ def confusion_figure(row_eval, model_name):
             customdata=[[tn, fp], [fn, tp]],
             texttemplate="<b>%{text}</b>",
             textfont=dict(size=13, color=TEXT),
-            colorscale=[
-                [0.00, "#FFFAF3"],
-                [0.28, model_color + "33"],
-                [0.60, model_color + "88"],
-                [1.00, model_color],
-            ],
+            colorscale=(
+                [
+                    [0.00, "#FFFAF3"],
+                    [0.28, "rgba(163,72,90,0.20)"],
+                    [0.60, "rgba(163,72,90,0.55)"],
+                    [1.00, NBC],
+                ]
+                if model_name == "NBC"
+                else [
+                    [0.00, "#FFFAF3"],
+                    [0.28, "rgba(75,86,148,0.20)"],
+                    [0.60, "rgba(75,86,148,0.55)"],
+                    [1.00, SVM],
+                ]
+            ),
             zmin=0,
             zmax=1,
             showscale=False,
