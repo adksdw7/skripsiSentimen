@@ -440,6 +440,139 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+st.markdown(
+    """
+    <style>
+    /* ============================================================
+       HEADER HORIZONTAL: TITLE + 3 FILTER APLIKASI
+       ============================================================ */
+    .top-title-wrap {
+        height: 100%;
+        min-height: 128px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 4px 8px 4px 2px;
+        box-sizing: border-box;
+    }
+
+    .top-title {
+        margin: 0 !important;
+        color: #9D6638 !important;
+        font-weight: 800 !important;
+        font-size: clamp(25px, 2.45vw, 42px) !important;
+        line-height: 1.12 !important;
+        letter-spacing: -0.025em !important;
+    }
+
+    .top-subtitle {
+        margin: 7px 0 0 0;
+        color: #9D6638 !important;
+        font-size: clamp(8px, .72vw, 11px);
+        line-height: 1.35;
+    }
+
+    .top-wallet-card {
+        width: 100%;
+        min-height: 98px;
+        box-sizing: border-box;
+        background: #FFFAF3;
+        border: 1px solid #9D6638;
+        border-radius: 11px;
+        padding: 8px 6px 6px 6px;
+        box-shadow: 0 3px 9px rgba(157, 102, 56, .07);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .top-wallet-logo {
+        height: 53px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+
+    .top-wallet-logo img {
+        width: 52px;
+        height: 52px;
+        object-fit: contain;
+        border-radius: 6px;
+    }
+
+    .top-wallet-links {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4px;
+    }
+
+    .top-wallet-link {
+        display: block;
+        min-width: 0;
+        border: 1px solid rgba(157,102,56,.75);
+        border-radius: 6px;
+        padding: 4px 2px;
+        background: #FFF2DB;
+        color: #9D6638 !important;
+        text-decoration: none !important;
+        text-align: center;
+        font-size: clamp(6px, .48vw, 8px);
+        line-height: 1.15;
+        font-weight: 600;
+    }
+
+    .st-key-top_header [data-testid="stVerticalBlockBorderWrapper"] {
+        padding: 10px 12px !important;
+        background: #FFFAF3 !important;
+        border: 1.5px solid #9D6638 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 4px 13px rgba(157, 102, 56, .08) !important;
+    }
+
+    .st-key-top_header [data-testid="stHorizontalBlock"] {
+        align-items: center !important;
+    }
+
+    .st-key-top_header [data-testid="stVerticalBlock"] {
+        gap: .30rem !important;
+    }
+
+    .st-key-top_header [data-testid="stToggle"] {
+        margin-top: -1px !important;
+        margin-bottom: -6px !important;
+    }
+
+    .st-key-top_header [data-testid="stToggle"] label p {
+        font-size: 9px !important;
+        font-weight: 700 !important;
+    }
+
+    @media (max-width: 900px) {
+        .top-title-wrap {
+            min-height: auto;
+            padding: 6px 2px 10px 2px;
+        }
+
+        .top-title {
+            font-size: clamp(25px, 7vw, 36px) !important;
+        }
+
+        .top-wallet-card {
+            min-height: 105px;
+        }
+
+        .top-wallet-link {
+            font-size: 8px;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -848,47 +981,63 @@ def classification_table(df, pred_col, model_name, app_name):
     )
 
 # ------------------------------------------------------------
-# 6. SESSION STATE + PILIH E-WALLET
+# 6. SESSION STATE + HEADER / FILTER E-WALLET HORIZONTAL
 # ------------------------------------------------------------
 for app, default in [("DANA", True), ("GoPay", True), ("ShopeePay", True)]:
     key = f"toggle_{slugify(app)}"
     if key not in st.session_state:
         st.session_state[key] = default
 
-st.markdown(
-    """
-    <div class="hero">
-        <h1>DASHBOARD KLASIFIKASI<br>SENTIMEN DANA, GOPAY, & SHOPEEPAY</h1>
-        <p>
-            Perbandingan hasil klasifikasi sentimen menggunakan
-            <span class="model-nbc"><b>Multinomial Naïve Bayes (NBC)</b></span>
-            dan
-            <span class="model-svm"><b>Support Vector Machine (SVM)</b></span>.
-        </p>
-    </div>
-    """,
-    unsafe_allow_html=True,
-)
+# Judul dan filter aplikasi berada dalam SATU BARIS.
+with st.container(border=True, key="top_header"):
+    header_cols = st.columns([1.58, 0.62, 0.62, 0.62], gap="small")
 
-st.markdown('<h2 class="section-title">Pilih E-Wallet</h2>', unsafe_allow_html=True)
-wallet_cols = st.columns(3, gap="medium")
-
-for col, app in zip(wallet_cols, APP_ORDER):
-    with col:
-        logo = resolve_logo(app)
-        logo_markup = image_html(logo, f"Logo {app}")
+    with header_cols[0]:
         st.markdown(
-            f'<div class="wallet-card">'
-            f'<div class="wallet-logo">{logo_markup}</div>'
-            f'<div class="wallet-links">'
-            f'<a class="wallet-link" href="{APP_WEBSITE_URL[app]}" target="_blank">Website Resmi</a>'
-            f'<a class="wallet-link" href="{APP_PLAYSTORE_URL[app]}" target="_blank">Play Store</a>'
-            f'</div></div>',
+            """
+            <div class="top-title-wrap">
+                <h1 class="top-title">
+                    DASHBOARD KLASIFIKASI<br>
+                    SENTIMEN DANA, GOPAY, &<br>
+                    SHOPEEPAY
+                </h1>
+                <div class="top-subtitle">
+                    Klasifikasi sentimen menggunakan Multinomial Naïve Bayes (NBC)
+                    dan Support Vector Machine (SVM)
+                </div>
+            </div>
+            """,
             unsafe_allow_html=True,
         )
-        st.toggle(app, key=f"toggle_{slugify(app)}")
 
-selected_apps = [app for app in APP_ORDER if st.session_state[f"toggle_{slugify(app)}"]]
+    for col, app in zip(header_cols[1:], APP_ORDER):
+        with col:
+            logo = resolve_logo(app)
+            logo_markup = image_html(logo, f"Logo {app}")
+
+            st.markdown(
+                f'<div class="top-wallet-card">'
+                f'<div class="top-wallet-logo">{logo_markup}</div>'
+                f'<div class="top-wallet-links">'
+                f'<a class="top-wallet-link" href="{APP_WEBSITE_URL[app]}" '
+                f'target="_blank">Kunjungi Website Resmi</a>'
+                f'<a class="top-wallet-link" href="{APP_PLAYSTORE_URL[app]}" '
+                f'target="_blank">Download di Play Store</a>'
+                f'</div>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
+
+            st.toggle(
+                app,
+                key=f"toggle_{slugify(app)}",
+            )
+
+selected_apps = [
+    app
+    for app in APP_ORDER
+    if st.session_state[f"toggle_{slugify(app)}"]
+]
 
 if not selected_apps:
     st.warning("Silakan aktifkan minimal satu aplikasi E-Wallet.")
