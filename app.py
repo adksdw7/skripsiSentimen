@@ -1331,154 +1331,48 @@ st.markdown(
 
 
 # ------------------------------------------------------------
-# 3F. SIDEBAR ICON + UNIFORM VISUAL ROW WIDTH
-# HANYA UI, tidak mengubah fungsi data/chart
+# 3F. VERIFIED SIDEBAR + UNIFORM PANEL HEIGHT
 # ------------------------------------------------------------
 st.markdown(
     """
     <style>
-    /* =========================================
-       SIDEBAR COLLAPSE / EXPAND SYMBOL
-       Tutup sidebar = <<
-       Buka sidebar  = >>
-       ========================================= */
-
-    /* Hilangkan glyph Material bawaan */
-    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
-    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"],
-    button[aria-label="Close sidebar"] [data-testid="stIconMaterial"],
-    button[aria-label="Open sidebar"] [data-testid="stIconMaterial"] {
-        font-size: 0 !important;
-        width: auto !important;
-        min-width: 24px !important;
-        overflow: visible !important;
-    }
-
-    /* Saat sidebar terbuka: tombol menutup = << */
-    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"]::before,
-    button[aria-label="Close sidebar"] [data-testid="stIconMaterial"]::before {
-        content: "<<" !important;
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        font-size: 21px !important;
-        font-weight: 800 !important;
-        line-height: 1 !important;
-        color: #9D6638 !important;
-        letter-spacing: -2px !important;
-    }
-
-    /* Saat sidebar tertutup: tombol membuka = >> */
-    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"]::before,
-    button[aria-label="Open sidebar"] [data-testid="stIconMaterial"]::before {
-        content: ">>" !important;
-        font-family: 'Plus Jakarta Sans', sans-serif !important;
-        font-size: 21px !important;
-        font-weight: 800 !important;
-        line-height: 1 !important;
-        color: #9D6638 !important;
-        letter-spacing: -2px !important;
-    }
-
-    /* Tombol sidebar tetap compact dan rapi */
-    [data-testid="stSidebarCollapseButton"] button,
-    [data-testid="stSidebarCollapsedControl"] button,
-    button[aria-label="Close sidebar"],
-    button[aria-label="Open sidebar"] {
-        border: none !important;
-        box-shadow: none !important;
-        color: #9D6638 !important;
-    }
-
-    /* =========================================
-       KONSISTENSI BARIS VISUALISASI
-       Lebar ditentukan sama oleh st.columns.
-       Padding setiap panel dibuat konsisten.
-       ========================================= */
-    .block-container [data-testid="stHorizontalBlock"] {
-        align-items: stretch !important;
-    }
-
-    .block-container [data-testid="stHorizontalBlock"] > [data-testid="stColumn"] {
-        min-width: 0 !important;
-    }
-
-    /* Panel chart punya padding kiri-kanan yang sama */
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        box-sizing: border-box !important;
-    }
-
-    /* Plot selalu mengisi lebar panel masing-masing */
-    [data-testid="stPlotlyChart"],
-    [data-testid="stPlotlyChart"] > div {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# ------------------------------------------------------------
-# 3G. FINAL SIDEBAR + EQUAL PANEL HEIGHT FIX
-# ------------------------------------------------------------
-st.markdown(
-    """
-    <style>
-    /* =======================================================
-       SIDEBAR
-       ======================================================= */
+    /* SIDEBAR BACKGROUND */
     [data-testid="stSidebar"],
     [data-testid="stSidebarContent"] {
         background: #FFF2DB !important;
     }
 
-    /* Hilangkan seluruh isi ikon bawaan Streamlit */
-    [data-testid="stSidebarCollapseButton"] span,
-    [data-testid="stSidebarCollapsedControl"] span,
-    button[data-testid="stSidebarCollapseButton"] span,
-    button[data-testid="stSidebarCollapsedControl"] span,
-    button[aria-label="Close sidebar"] span,
-    button[aria-label="Open sidebar"] span {
-        display: none !important;
-        visibility: hidden !important;
-        font-size: 0 !important;
-    }
-
-    /* Juga sembunyikan teks material yang kadang muncul sebagai
-       keyboard_double_arrow_right / keyboard_double_arrow_left */
-    [data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
-    [data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"],
-    button[data-testid="stSidebarCollapseButton"] [data-testid="stIconMaterial"],
-    button[data-testid="stSidebarCollapsedControl"] [data-testid="stIconMaterial"] {
-        display: none !important;
-        visibility: hidden !important;
-        width: 0 !important;
-        height: 0 !important;
-        overflow: hidden !important;
-    }
-
-    /* Bentuk tombol */
+    /* Paksa tombol sidebar tidak menampilkan teks icon Material */
     [data-testid="stSidebarCollapseButton"] button,
     [data-testid="stSidebarCollapsedControl"] button,
-    button[data-testid="stSidebarCollapseButton"],
-    button[data-testid="stSidebarCollapsedControl"],
     button[aria-label="Close sidebar"],
     button[aria-label="Open sidebar"] {
         position: relative !important;
-        min-width: 42px !important;
-        width: 42px !important;
-        height: 36px !important;
+        width: 44px !important;
+        min-width: 44px !important;
+        height: 38px !important;
         padding: 0 !important;
+        font-size: 0 !important;
+        color: transparent !important;
+        overflow: hidden !important;
         border: none !important;
-        outline: none !important;
         box-shadow: none !important;
-        background: rgba(255,250,243,.70) !important;
+        background: rgba(255,250,243,.78) !important;
         border-radius: 9px !important;
     }
 
-    /* SIDEBAR TERBUKA -> tombol menutup = << */
+    [data-testid="stSidebarCollapseButton"] button *,
+    [data-testid="stSidebarCollapsedControl"] button *,
+    button[aria-label="Close sidebar"] *,
+    button[aria-label="Open sidebar"] * {
+        display: none !important;
+        visibility: hidden !important;
+        font-size: 0 !important;
+        color: transparent !important;
+    }
+
+    /* Sidebar terbuka -> tombol penutup << */
     [data-testid="stSidebarCollapseButton"] button::after,
-    button[data-testid="stSidebarCollapseButton"]::after,
     button[aria-label="Close sidebar"]::after {
         content: "<<" !important;
         position: absolute !important;
@@ -1486,17 +1380,17 @@ st.markdown(
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        color: #9D6638 !important;
         font-family: Arial, sans-serif !important;
         font-size: 22px !important;
         font-weight: 800 !important;
-        line-height: 1 !important;
         letter-spacing: -3px !important;
+        line-height: 1 !important;
+        color: #9D6638 !important;
+        visibility: visible !important;
     }
 
-    /* SIDEBAR TERTUTUP -> tombol membuka = >> */
+    /* Sidebar tertutup -> tombol pembuka >> */
     [data-testid="stSidebarCollapsedControl"] button::after,
-    button[data-testid="stSidebarCollapsedControl"]::after,
     button[aria-label="Open sidebar"]::after {
         content: ">>" !important;
         position: absolute !important;
@@ -1504,32 +1398,16 @@ st.markdown(
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        color: #9D6638 !important;
         font-family: Arial, sans-serif !important;
         font-size: 22px !important;
         font-weight: 800 !important;
-        line-height: 1 !important;
         letter-spacing: -3px !important;
-    }
-
-    /* Fallback bila Streamlit menaruh pseudo pada wrapper, bukan button */
-    [data-testid="stSidebarCollapseButton"]:not(:has(button))::after {
-        content: "<<" !important;
+        line-height: 1 !important;
         color: #9D6638 !important;
-        font-size: 22px !important;
-        font-weight: 800 !important;
+        visibility: visible !important;
     }
 
-    [data-testid="stSidebarCollapsedControl"]:not(:has(button))::after {
-        content: ">>" !important;
-        color: #9D6638 !important;
-        font-size: 22px !important;
-        font-weight: 800 !important;
-    }
-
-    /* =======================================================
-       KOLOM DALAM SATU BARIS HARUS STRETCH
-       ======================================================= */
+    /* Semua kolom pada baris visualisasi stretch */
     .block-container [data-testid="stHorizontalBlock"] {
         align-items: stretch !important;
     }
@@ -1547,96 +1425,78 @@ st.markdown(
         height: 100% !important;
     }
 
-    /* =======================================================
-       PANEL ROW 1
-       Rating / Tren Positif / Tren Negatif
-       ======================================================= */
+    /* ROW 1 */
     [class*="st-key-panel_row1_"] {
         height: 100% !important;
     }
-
     [class*="st-key-panel_row1_"] [data-testid="stVerticalBlockBorderWrapper"] {
         min-height: 405px !important;
         height: 100% !important;
-        padding: 18px 18px 20px 18px !important;
+        padding: 18px !important;
         box-sizing: border-box !important;
     }
 
-    /* =======================================================
-       PANEL ROW 2
-       Distribusi NBC / Distribusi SVM / Ringkasan Distribusi
-       SEMUA SAMA TINGGI
-       ======================================================= */
+    /* ROW 2 - distribusi sentimen + ringkasan */
     [class*="st-key-panel_row2_"] {
         height: 100% !important;
     }
-
     [class*="st-key-panel_row2_"] [data-testid="stVerticalBlockBorderWrapper"] {
-        min-height: 555px !important;
-        height: 100% !important;
-        padding: 20px 18px 26px 18px !important;
+        min-height: 575px !important;
+        height: 575px !important;
+        padding: 20px 18px 24px 18px !important;
         box-sizing: border-box !important;
         overflow: visible !important;
     }
-
-    [class*="st-key-panel_row2_"] [data-testid="stVerticalBlock"] {
-        min-height: 100% !important;
-    }
-
-    /* ruang bawah mini card positif/negatif */
     [class*="st-key-panel_row2_"] .sentiment-mini-grid {
         margin-top: 2px !important;
         margin-bottom: 8px !important;
     }
-
     [class*="st-key-panel_row2_"] .sentiment-mini {
-        min-height: 84px !important;
-        padding: 13px 8px !important;
+        min-height: 82px !important;
         box-sizing: border-box !important;
     }
-
-    /* Ringkasan distribusi ditaruh lebih seimbang di tengah */
     [class*="st-key-panel_row2_summary_"] [data-testid="stVerticalBlock"] {
         justify-content: center !important;
     }
 
-    /* =======================================================
-       PANEL ROW 3
-       Confusion NBC / Confusion SVM / Ringkasan Tren
-       SEMUA SAMA TINGGI
-       ======================================================= */
+    /* ROW 3 */
     [class*="st-key-panel_row3_"] {
         height: 100% !important;
     }
-
     [class*="st-key-panel_row3_"] [data-testid="stVerticalBlockBorderWrapper"] {
-        min-height: 430px !important;
-        height: 100% !important;
+        min-height: 445px !important;
+        height: 445px !important;
         padding: 20px 18px 22px 18px !important;
         box-sizing: border-box !important;
     }
-
     [class*="st-key-panel_row3_summary_"] [data-testid="stVerticalBlock"] {
         justify-content: center !important;
     }
 
-    /* =======================================================
-       PANEL ROW 4
-       Diagram Metrik / Perbandingan Kinerja
-       SEMUA SAMA TINGGI
-       ======================================================= */
+    /* ROW 4 */
     [class*="st-key-panel_row4_"] {
         height: 100% !important;
     }
-
     [class*="st-key-panel_row4_"] [data-testid="stVerticalBlockBorderWrapper"] {
-        min-height: 410px !important;
-        height: 100% !important;
+        min-height: 420px !important;
+        height: 420px !important;
         padding: 20px 18px 22px 18px !important;
         box-sizing: border-box !important;
     }
 
-    /* Plot harus mengisi lebar panel */
+    /* ROW 5 dan ROW 6 - wordcloud vs tabel klasifikasi */
+    [class*="st-key-panel_row5_"],
+    [class*="st-key-panel_row6_"] {
+        height: 100% !important;
+    }
+    [class*="st-key-panel_row5_"] [data-testid="stVerticalBlockBorderWrapper"],
+    [class*="st-key-panel_row6_"] [data-testid="stVerticalBlockBorderWrapper"] {
+        min-height: 560px !important;
+        height: 560px !important;
+        padding: 20px 18px 22px 18px !important;
+        box-sizing: border-box !important;
+    }
+
     [data-testid="stPlotlyChart"],
     [data-testid="stPlotlyChart"] > div {
         width: 100% !important;
@@ -1647,7 +1507,9 @@ st.markdown(
         [class*="st-key-panel_row1_"] [data-testid="stVerticalBlockBorderWrapper"],
         [class*="st-key-panel_row2_"] [data-testid="stVerticalBlockBorderWrapper"],
         [class*="st-key-panel_row3_"] [data-testid="stVerticalBlockBorderWrapper"],
-        [class*="st-key-panel_row4_"] [data-testid="stVerticalBlockBorderWrapper"] {
+        [class*="st-key-panel_row4_"] [data-testid="stVerticalBlockBorderWrapper"],
+        [class*="st-key-panel_row5_"] [data-testid="stVerticalBlockBorderWrapper"],
+        [class*="st-key-panel_row6_"] [data-testid="stVerticalBlockBorderWrapper"] {
             min-height: auto !important;
             height: auto !important;
         }
@@ -2214,7 +2076,7 @@ for selected_app in APP_ORDER:
     row2 = st.columns([1, 1, 1], gap="medium")
 
     with row2[0]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row2_nbc_{slugify(selected_app)}"):
             st.markdown(f'<div class="panel-title model-nbc">Distribusi Sentimen NBC</div>', unsafe_allow_html=True)
             st.plotly_chart(donut_figure(nbc_summary, "NBC"), use_container_width=True, config=PLOTLY_CONFIG)
             st.markdown(
@@ -2226,7 +2088,7 @@ for selected_app in APP_ORDER:
             )
 
     with row2[1]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row2_svm_{slugify(selected_app)}"):
             st.markdown(f'<div class="panel-title model-svm">Distribusi Sentimen SVM</div>', unsafe_allow_html=True)
             st.plotly_chart(donut_figure(svm_summary, "SVM"), use_container_width=True, config=PLOTLY_CONFIG)
             st.markdown(
@@ -2238,7 +2100,7 @@ for selected_app in APP_ORDER:
             )
 
     with row2[2]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row2_summary_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Ringkasan Distribusi Sentimen NBC & SVM</div>', unsafe_allow_html=True)
             inner_cols = st.columns([0.04, 0.92, 0.04])
             with inner_cols[1]:
@@ -2257,17 +2119,17 @@ for selected_app in APP_ORDER:
     row3 = st.columns([1, 1, 1], gap="medium")
 
     with row3[0]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row3_nbc_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title model-nbc">Confusion Matrix<br>Multinomial Naïve Bayes</div>', unsafe_allow_html=True)
             st.plotly_chart(confusion_figure(row_nbc, "NBC"), use_container_width=True, config=PLOTLY_CONFIG)
 
     with row3[1]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row3_svm_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title model-svm">Confusion Matrix<br>Support Vector Machine</div>', unsafe_allow_html=True)
             st.plotly_chart(confusion_figure(row_svm, "SVM"), use_container_width=True, config=PLOTLY_CONFIG)
 
     with row3[2]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row3_summary_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Ringkasan Tren Sentimen NBC & SVM</div>', unsafe_allow_html=True)
             st.markdown(cm_summary_html(row_nbc, "NBC"), unsafe_allow_html=True)
             st.markdown(cm_summary_html(row_svm, "SVM"), unsafe_allow_html=True)
@@ -2283,12 +2145,12 @@ for selected_app in APP_ORDER:
     row4 = st.columns([1, 1], gap="medium")
 
     with row4[0]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row4_metric_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Diagram Metrik Evaluasi</div>', unsafe_allow_html=True)
             st.plotly_chart(performance_figure(row_nbc, row_svm), use_container_width=True, config=PLOTLY_CONFIG)
 
     with row4[1]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row4_compare_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Perbandingan Kinerja</div>', unsafe_allow_html=True)
 
             perf_table = pd.DataFrame({
@@ -2313,7 +2175,7 @@ for selected_app in APP_ORDER:
     row5 = st.columns([0.72, 2.1], gap="medium")
 
     with row5[0]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row5_wordcloud_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title model-nbc">Word Cloud Positif NBC</div>', unsafe_allow_html=True)
             text_pos_nbc = " ".join(nbc_app.loc[nbc_app["predictLabelNBC"] == "positif", "content"].dropna().astype(str))
             st.plotly_chart(wordcloud_plotly(text_pos_nbc, NBC, "NBC Positif"), use_container_width=True, config=PLOTLY_CONFIG)
@@ -2323,7 +2185,7 @@ for selected_app in APP_ORDER:
             st.plotly_chart(wordcloud_plotly(text_neg_nbc, NBC_NEG, "NBC Negatif"), use_container_width=True, config=PLOTLY_CONFIG)
 
     with row5[1]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row5_table_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title model-nbc">Contoh Hasil Klasifikasi Ulasan Model NBC</div>', unsafe_allow_html=True)
             classification_table(nbc_app, "predictLabelNBC", "NBC", selected_app)
 
@@ -2333,7 +2195,7 @@ for selected_app in APP_ORDER:
     row6 = st.columns([0.72, 2.1], gap="medium")
 
     with row6[0]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row6_wordcloud_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title model-svm">Word Cloud Positif SVM</div>', unsafe_allow_html=True)
             text_pos_svm = " ".join(svm_app.loc[svm_app["predictLabelSVM"] == "positif", "content"].dropna().astype(str))
             st.plotly_chart(wordcloud_plotly(text_pos_svm, SVM, "SVM Positif"), use_container_width=True, config=PLOTLY_CONFIG)
@@ -2343,7 +2205,7 @@ for selected_app in APP_ORDER:
             st.plotly_chart(wordcloud_plotly(text_neg_svm, SVM_NEG, "SVM Negatif"), use_container_width=True, config=PLOTLY_CONFIG)
 
     with row6[1]:
-        with st.container(border=True):
+        with st.container(border=True, key=f"panel_row6_table_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title model-svm">Contoh Hasil Klasifikasi Ulasan Model SVM</div>', unsafe_allow_html=True)
             classification_table(svm_app, "predictLabelSVM", "SVM", selected_app)
 
