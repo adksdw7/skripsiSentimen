@@ -2352,7 +2352,7 @@ for selected_app in APP_ORDER:
     # --------------------------------------------------------
     st.markdown(
         f'<div class="kpi-grid-3">'
-        f'<div class="kpi-card"><p class="kpi-value">{total_data:,}</p><p class="kpi-label">Total Data Preparation</p></div>'
+        f'<div class="kpi-card"><p class="kpi-value">{total_data:,}</p><p class="kpi-label">Total Data</p></div>'
         f'<div class="kpi-card"><p class="kpi-value">{data_train:,}</p><p class="kpi-label">Data Training</p></div>'
         f'<div class="kpi-card"><p class="kpi-value">{data_test:,}</p><p class="kpi-label">Data Testing</p></div>'
         f'</div>',
