@@ -947,6 +947,193 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ------------------------------------------------------------
+# 3D. PANEL SPACING & ALIGNMENT FIX
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* Padding umum panel agar isi tidak mepet */
+    [data-testid="stVerticalBlockBorderWrapper"] {
+        padding: 14px 16px !important;
+        box-sizing: border-box !important;
+    }
+
+    [data-testid="stVerticalBlockBorderWrapper"] [data-testid="stVerticalBlock"] {
+        gap: .55rem !important;
+    }
+
+    /* Header tetap sedikit lebih rapat */
+    .st-key-top_header [data-testid="stVerticalBlockBorderWrapper"] {
+        padding: 12px 14px !important;
+    }
+
+    /* Lebarkan kartu filter aplikasi */
+    .top-title-wrap {
+        min-height: 176px !important;
+        height: 176px !important;
+        padding: 8px 10px 8px 4px !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stVerticalBlockBorderWrapper"],
+    .st-key-header_card_gopay [data-testid="stVerticalBlockBorderWrapper"],
+    .st-key-header_card_shopeepay [data-testid="stVerticalBlockBorderWrapper"] {
+        min-height: 176px !important;
+        height: 176px !important;
+        padding: 12px 12px 10px 12px !important;
+    }
+
+    .top-wallet-card {
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+
+    .top-wallet-logo {
+        height: 68px !important;
+        margin-bottom: 2px !important;
+    }
+
+    .top-wallet-logo img {
+        width: 64px !important;
+        height: 64px !important;
+    }
+
+    .top-wallet-links {
+        gap: 8px !important;
+        margin-top: 2px !important;
+    }
+
+    .top-wallet-link {
+        min-height: 30px !important;
+        padding: 6px 5px !important;
+        font-size: 7px !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stToggle"],
+    .st-key-header_card_gopay [data-testid="stToggle"],
+    .st-key-header_card_shopeepay [data-testid="stToggle"] {
+        margin-top: 6px !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stToggle"] label,
+    .st-key-header_card_gopay [data-testid="stToggle"] label,
+    .st-key-header_card_shopeepay [data-testid="stToggle"] label {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
+        gap: 8px !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stToggle"] label p,
+    .st-key-header_card_gopay [data-testid="stToggle"] label p,
+    .st-key-header_card_shopeepay [data-testid="stToggle"] label p {
+        font-size: 11px !important;
+        font-weight: 600 !important;
+    }
+
+    /* Konten panel ringkasan dibuat lebih simetris */
+    .agreement-grid {
+        gap: 10px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .agreement-card {
+        padding: 18px 10px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        min-height: 84px !important;
+    }
+
+    .agreement-card .big {
+        line-height: 1 !important;
+        margin-bottom: 8px !important;
+    }
+
+    .sentiment-mini {
+        padding: 12px 8px !important;
+    }
+
+    /* Summary TN TP FN FP */
+    .cm-summary-grid {
+        gap: 10px !important;
+    }
+
+    .cm-box {
+        padding: 14px 6px !important;
+        min-height: 72px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .cm-box small {
+        font-size: 10px !important;
+        margin-bottom: 4px !important;
+    }
+
+    .cm-box b {
+        font-size: clamp(18px, 1.45vw, 28px) !important;
+    }
+
+    /* Note bawah confusion summary tanpa box */
+    .cm-note-text {
+        text-align: center;
+        font-size: 12px;
+        line-height: 1.45;
+        color: #9D6638;
+        margin-top: 12px;
+        padding-top: 8px;
+    }
+
+    /* Box metric cards */
+    .metric-row {
+        gap: 8px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .metric-box {
+        min-height: 74px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 12px 6px !important;
+    }
+
+    /* select & dataframe padding */
+    [data-baseweb="select"] > div {
+        min-height: 42px !important;
+    }
+
+    /* Table wrapper */
+    [data-testid="stDataFrame"] {
+        margin-top: 4px !important;
+    }
+
+    @media (max-width: 900px) {
+        .top-title-wrap {
+            min-height: auto !important;
+            height: auto !important;
+        }
+
+        .st-key-header_card_dana [data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-header_card_gopay [data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-header_card_shopeepay [data-testid="stVerticalBlockBorderWrapper"] {
+            min-height: 176px !important;
+            height: auto !important;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -1208,7 +1395,7 @@ def difference_figure(compare):
     fig.update_layout(showlegend=False)
     fig.update_xaxes(title="Jumlah Ulasan")
     fig.update_yaxes(title="")
-    return plot_theme(fig, height=155, margin=dict(l=15, r=42, t=10, b=35))
+    return plot_theme(fig, height=165, margin=dict(l=20, r=28, t=10, b=36))
 
 
 def confusion_figure(row_eval, model_name):
@@ -1365,7 +1552,7 @@ for app, default in [("DANA", True), ("GoPay", True), ("ShopeePay", True)]:
 # Judul di kiri + tiga kartu aplikasi di kanan.
 # Logo, link, dan toggle berada di dalam kartu aplikasi yang sama.
 with st.container(border=False, key="top_header"):
-    header_cols = st.columns([1.58, 0.62, 0.62, 0.62], gap="small")
+    header_cols = st.columns([1.28, 0.90, 0.90, 0.90], gap="small")
 
     with header_cols[0]:
         st.markdown(
@@ -1504,7 +1691,7 @@ for selected_app in APP_ORDER:
     # --------------------------------------------------------
     # ROW 2: Donut NBC | Donut SVM | Ringkasan distribusi/perbedaan
     # --------------------------------------------------------
-    row2 = st.columns([1, 1, 1.13], gap="medium")
+    row2 = st.columns([1, 1, 1], gap="medium")
 
     with row2[0]:
         with st.container(border=True):
@@ -1533,19 +1720,21 @@ for selected_app in APP_ORDER:
     with row2[2]:
         with st.container(border=True):
             st.markdown('<div class="panel-title">Ringkasan Distribusi Sentimen NBC & SVM</div>', unsafe_allow_html=True)
-            st.markdown(
-                f'<div class="agreement-grid">'
-                f'<div class="agreement-card"><div class="big">{same_count:,}</div><div class="small">Prediksi Sama<br>{same_pct:.2f}% dari seluruh data</div></div>'
-                f'<div class="agreement-card"><div class="big">{different_count:,}</div><div class="small">Prediksi Berbeda<br>{diff_pct:.2f}% dari seluruh data</div></div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
-            st.plotly_chart(difference_figure(compare), use_container_width=True, config=PLOTLY_CONFIG)
+            inner_cols = st.columns([0.04, 0.92, 0.04])
+            with inner_cols[1]:
+                st.markdown(
+                    f'<div class="agreement-grid">'
+                    f'<div class="agreement-card"><div class="big">{same_count:,}</div><div class="small">Prediksi Sama<br>{same_pct:.2f}% dari seluruh data</div></div>'
+                    f'<div class="agreement-card"><div class="big">{different_count:,}</div><div class="small">Prediksi Berbeda<br>{diff_pct:.2f}% dari seluruh data</div></div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
+                st.plotly_chart(difference_figure(compare), use_container_width=True, config=PLOTLY_CONFIG)
 
     # --------------------------------------------------------
     # ROW 3: Confusion NBC | Confusion SVM | Ringkasan TN/TP/FN/FP
     # --------------------------------------------------------
-    row3 = st.columns([1, 1, 1.18], gap="medium")
+    row3 = st.columns([1, 1, 1], gap="medium")
 
     with row3[0]:
         with st.container(border=True):
@@ -1563,7 +1752,7 @@ for selected_app in APP_ORDER:
             st.markdown(cm_summary_html(row_nbc, "NBC"), unsafe_allow_html=True)
             st.markdown(cm_summary_html(row_svm, "SVM"), unsafe_allow_html=True)
             st.markdown(
-                '<div class="cm-note">Warna lebih pekat menunjukkan klasifikasi benar (TP dan TN), '
+                '<div class="cm-note-text">Warna lebih pekat menunjukkan klasifikasi benar (TP dan TN), '
                 'sedangkan warna lebih muda menunjukkan kesalahan klasifikasi (FP dan FN)</div>',
                 unsafe_allow_html=True,
             )
@@ -1571,7 +1760,7 @@ for selected_app in APP_ORDER:
     # --------------------------------------------------------
     # ROW 4: Diagram metrik | Perbandingan kinerja
     # --------------------------------------------------------
-    row4 = st.columns([1.25, 1], gap="medium")
+    row4 = st.columns([1, 1], gap="medium")
 
     with row4[0]:
         with st.container(border=True):
@@ -1581,22 +1770,22 @@ for selected_app in APP_ORDER:
     with row4[1]:
         with st.container(border=True):
             st.markdown('<div class="panel-title">Perbandingan Kinerja</div>', unsafe_allow_html=True)
-            st.markdown('<div class="cm-row-label model-nbc">NBC</div>', unsafe_allow_html=True)
-            st.markdown(metric_cards_html(row_nbc, "NBC"), unsafe_allow_html=True)
-            st.markdown('<div class="cm-row-label model-svm">SVM</div>', unsafe_allow_html=True)
-            st.markdown(metric_cards_html(row_svm, "SVM"), unsafe_allow_html=True)
 
             perf_table = pd.DataFrame({
                 "Metrik": METRIC_ORDER,
-                "NBC": [float(row_nbc[m]) for m in METRIC_ORDER],
-                "SVM": [float(row_svm[m]) for m in METRIC_ORDER],
+                "Unggul": [
+                    "NBC" if float(row_nbc[m]) > float(row_svm[m])
+                    else ("SVM" if float(row_svm[m]) > float(row_nbc[m]) else "Sama")
+                    for m in METRIC_ORDER
+                ],
             })
-            perf_table["Unggul"] = perf_table.apply(
-                lambda r: "NBC" if r["NBC"] > r["SVM"] else ("SVM" if r["SVM"] > r["NBC"] else "Sama"), axis=1
+
+            st.dataframe(
+                perf_table,
+                use_container_width=True,
+                hide_index=True,
+                height=260,
             )
-            perf_table["NBC"] = perf_table["NBC"].map(lambda x: f"{x*100:.2f}%")
-            perf_table["SVM"] = perf_table["SVM"].map(lambda x: f"{x*100:.2f}%")
-            st.dataframe(perf_table, use_container_width=True, hide_index=True, height=220)
 
     # --------------------------------------------------------
     # ROW 5: Wordcloud NBC | Contoh klasifikasi NBC
