@@ -1647,11 +1647,23 @@ st.markdown(
         color: transparent !important;
     }
 
-    /* Catatan: ::after HANYA dipasang di elemen test-id container-nya
-       (bukan juga di "button" turunannya / aria-label), supaya tidak
-       muncul 2 simbol bertumpuk kalau Streamlit merender test-id pada
-       elemen pembungkus SEKALIGUS ada <button> di dalamnya. */
-    [data-testid="stSidebarCollapseButton"]::after {
+    /* Wrapper/container-nya sendiri DIPAKSA tidak menampilkan simbol
+       apapun -- ini mencegah dobel kalau test-id ternyata ada di div
+       pembungkus yang di dalamnya ada <button> tersendiri. */
+    [data-testid="stSidebarCollapseButton"]::after,
+    [data-testid="stSidebarCollapsedControl"]::after,
+    [data-testid="collapsedControl"]::after {
+        content: none !important;
+    }
+
+    /* Simbol HANYA dirender dari elemen <button> yang sesungguhnya
+       bisa diklik -- baik saat test-id ada langsung di button itu,
+       maupun saat test-id ada di div pembungkusnya. Kalau test-id
+       memang langsung di button, selector di bawah ini otomatis
+       menang (lebih spesifik) dari aturan content:none di atas. */
+    [data-testid="stSidebarCollapseButton"] button::after,
+    button[data-testid="stSidebarCollapseButton"]::after,
+    button[aria-label="Close sidebar"]::after {
         content: "<<" !important;
         font-family: Arial, sans-serif !important;
         font-size: 20px !important;
@@ -1660,8 +1672,11 @@ st.markdown(
         color: #9D6638 !important;
     }
 
-    [data-testid="stSidebarCollapsedControl"]::after,
-    [data-testid="collapsedControl"]::after {
+    [data-testid="stSidebarCollapsedControl"] button::after,
+    button[data-testid="stSidebarCollapsedControl"]::after,
+    [data-testid="collapsedControl"] button::after,
+    button[data-testid="collapsedControl"]::after,
+    button[aria-label="Open sidebar"]::after {
         content: ">>" !important;
         font-family: Arial, sans-serif !important;
         font-size: 20px !important;
@@ -1686,11 +1701,20 @@ st.markdown(
         box-shadow: 0 2px 10px rgba(157,102,56,.10) !important;
     }
 
-    /* Header sekarang fixed (lepas dari alur normal halaman), jadi
-       jarak ke judul diatur manual di sini secara pas -- bukan lagi
-       dari padding-top bawaan section 3 yang tidak lagi relevan. */
+    /* Header sekarang fixed (lepas dari alur normal halaman). Reset
+       dulu semua kemungkinan padding/margin bawaan Streamlit di
+       container atas yang bisa ikut menambah jarak ke judul, baru
+       jarak yang benar-benar dipakai diatur SATU tempat saja lewat
+       .block-container di bawah. */
+    [data-testid="stAppViewContainer"],
+    [data-testid="stMain"] {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
+
     .block-container {
-        padding-top: 3.4rem !important;
+        padding-top: 3.2rem !important;
+        margin-top: 0 !important;
     }
 
     /* -----------------------------------------------------------
