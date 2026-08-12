@@ -577,7 +577,7 @@ label_evaluasi_sidebar = (
 
 NAV_ITEMS = [
     ("Pilih E-Wallet", "pilih-e-wallet"),
-    ("Hasil Analisis", "hasil-analisis"),
+    ("Pilih Model", "hasil-analisis"),
     ("Proporsi Distribusi Sentimen Pengguna", "proporsi-sentimen"),
     ("Grafik Tren Perkembangan Sentimen Bulanan", "tren-sentimen"),
     ("Penyebaran Distribusi Rating Bintang Pengguna", "distribusi-rating"),
