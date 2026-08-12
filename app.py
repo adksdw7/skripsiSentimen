@@ -2080,30 +2080,66 @@ def confusion_figure(row_eval, model_name):
 
 def performance_figure(row_nbc, row_svm):
     records = []
+
     for model_name, row in [("NBC", row_nbc), ("SVM", row_svm)]:
         for metric in METRIC_ORDER:
-            records.append({"Model": model_name, "Metrik": metric, "Nilai": float(row[metric])})
+            value_pct = float(row[metric]) * 100
+            records.append({
+                "Model": model_name,
+                "Metrik": metric,
+                "Nilai": value_pct
+            })
+
     df = pd.DataFrame(records)
+
     fig = px.bar(
         df,
         x="Metrik",
         y="Nilai",
         color="Model",
         barmode="group",
-        text=df["Nilai"].map(lambda x: f"{x:.3f}"),
-        category_orders={"Model": ["NBC", "SVM"], "Metrik": METRIC_ORDER},
+        text=df["Nilai"].map(lambda x: f"{x:.2f}%"),
+        category_orders={
+            "Model": ["NBC", "SVM"],
+            "Metrik": METRIC_ORDER
+        },
         color_discrete_map=MODEL_COLOR,
     )
+
     fig.update_traces(
         textposition="outside",
         cliponaxis=False,
-        hovertemplate="<b>%{fullData.name}</b><br>Metrik: %{x}<br>Nilai: %{y:.4f}<extra></extra>",
+        hovertemplate=(
+            "<b>%{fullData.name}</b><br>"
+            "Metrik: %{x}<br>"
+            "Nilai: %{y:.2f}%"
+            "<extra></extra>"
+        ),
     )
-    fig.update_yaxes(title="Nilai", range=[0, 1.08], tickformat=".2f")
-    fig.update_xaxes(title="")
-    fig.update_layout(legend=dict(orientation="h", x=.5, xanchor="center", y=1.12))
-    return plot_theme(fig, height=330, margin=dict(l=45, r=15, t=48, b=50))
 
+    fig.update_yaxes(
+        title="Nilai (%)",
+        range=[0, 108],
+        ticksuffix="%",
+        tickformat=".0f"
+    )
+
+    fig.update_xaxes(title="")
+
+    fig.update_layout(
+        legend=dict(
+            orientation="h",
+            x=.5,
+            xanchor="center",
+            y=1.12
+        )
+    )
+
+    return plot_theme(
+        fig,
+        height=330,
+        margin=dict(l=55, r=15, t=48, b=50)
+    )
 
 def wordcloud_plotly(text, color, key_title):
     if not str(text).strip():
