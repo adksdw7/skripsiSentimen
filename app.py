@@ -1134,6 +1134,201 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ------------------------------------------------------------
+# 3E. FINAL HEADER LAYOUT
+# Judul + subjudul tengah, filter aplikasi di bawahnya
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* Blok judul utama */
+    .dashboard-heading-block {
+        width: min(100%, 1180px);
+        margin: 0 auto 22px auto;
+        padding: 10px clamp(12px, 3vw, 42px) 6px clamp(12px, 3vw, 42px);
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .dashboard-heading-title {
+        margin: 0 auto !important;
+        color: #9D6638 !important;
+        font-size: clamp(30px, 4vw, 54px) !important;
+        font-weight: 800 !important;
+        line-height: 1.10 !important;
+        letter-spacing: -0.03em !important;
+        text-align: center !important;
+    }
+
+    .dashboard-heading-subtitle {
+        width: min(100%, 980px);
+        margin: 11px auto 0 auto;
+        padding: 0 clamp(8px, 2vw, 28px);
+        box-sizing: border-box;
+        color: #9D6638 !important;
+        font-size: clamp(11px, 1.05vw, 15px);
+        line-height: 1.5;
+        text-align: center;
+    }
+
+    /* Box aplikasi mengikuti lebar kolom secara penuh */
+    .final-wallet-card {
+        width: 100%;
+        min-height: 210px;
+        box-sizing: border-box;
+        padding: 20px 18px 18px 18px;
+        background: linear-gradient(
+            180deg,
+            #FFF2DB 0%,
+            #FFF5E5 45%,
+            #FFFAF3 100%
+        );
+        border: none !important;
+        outline: none !important;
+        border-radius: 16px;
+        box-shadow: 0 8px 22px rgba(117,78,42,.14);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .final-wallet-logo {
+        width: 100%;
+        height: 112px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 12px;
+    }
+
+    .final-wallet-logo img {
+        width: 108px;
+        height: 108px;
+        object-fit: contain;
+    }
+
+    .final-wallet-links {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        box-sizing: border-box;
+    }
+
+    .final-wallet-link {
+        min-height: 40px;
+        padding: 7px 8px;
+        box-sizing: border-box;
+        border: none !important;
+        outline: none !important;
+        border-radius: 9px;
+        background: linear-gradient(
+            180deg,
+            #FFF2DB 0%,
+            #FFFAF3 100%
+        );
+        box-shadow: 0 4px 10px rgba(117,78,42,.09);
+        color: #9D6638 !important;
+        text-decoration: none !important;
+        font-size: clamp(8px, .68vw, 11px);
+        font-weight: 600;
+        line-height: 1.2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    .final-wallet-link:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 13px rgba(117,78,42,.13);
+    }
+
+    /* Toggle tepat di bawah masing-masing kartu */
+    .st-key-final_selector_dana [data-testid="stToggle"],
+    .st-key-final_selector_gopay [data-testid="stToggle"],
+    .st-key-final_selector_shopeepay [data-testid="stToggle"] {
+        margin-top: 7px !important;
+        margin-bottom: 0 !important;
+        padding-left: 0 !important;
+    }
+
+    .st-key-final_selector_dana [data-testid="stToggle"] label,
+    .st-key-final_selector_gopay [data-testid="stToggle"] label,
+    .st-key-final_selector_shopeepay [data-testid="stToggle"] label {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+    }
+
+    .st-key-final_selector_dana [data-testid="stToggle"] label p,
+    .st-key-final_selector_gopay [data-testid="stToggle"] label p,
+    .st-key-final_selector_shopeepay [data-testid="stToggle"] label p {
+        color: #9D6638 !important;
+        font-size: clamp(11px, 1vw, 15px) !important;
+        font-weight: 500 !important;
+    }
+
+    /* Container selector hanya untuk grouping, bukan box tambahan */
+    .st-key-final_selector_dana [data-testid="stVerticalBlockBorderWrapper"],
+    .st-key-final_selector_gopay [data-testid="stVerticalBlockBorderWrapper"],
+    .st-key-final_selector_shopeepay [data-testid="stVerticalBlockBorderWrapper"] {
+        background: transparent !important;
+        box-shadow: none !important;
+        border: none !important;
+        outline: none !important;
+        padding: 0 !important;
+        overflow: visible !important;
+    }
+
+    .st-key-final_selector_dana [data-testid="stVerticalBlock"],
+    .st-key-final_selector_gopay [data-testid="stVerticalBlock"],
+    .st-key-final_selector_shopeepay [data-testid="stVerticalBlock"] {
+        gap: 0 !important;
+    }
+
+    /* Jarak bawah selector sebelum dashboard aplikasi */
+    .final-wallet-spacer {
+        height: 12px;
+    }
+
+    @media (max-width: 900px) {
+        .dashboard-heading-block {
+            margin-bottom: 16px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+
+        .dashboard-heading-title {
+            font-size: clamp(27px, 7vw, 38px) !important;
+        }
+
+        .final-wallet-card {
+            min-height: 190px;
+            padding: 16px 13px;
+        }
+
+        .final-wallet-logo {
+            height: 92px;
+        }
+
+        .final-wallet-logo img {
+            width: 88px;
+            height: 88px;
+        }
+
+        .final-wallet-links {
+            grid-template-columns: 1fr;
+            gap: 7px;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -1542,65 +1737,62 @@ def classification_table(df, pred_col, model_name, app_name):
     )
 
 # ------------------------------------------------------------
-# 6. SESSION STATE + HEADER / FILTER E-WALLET HORIZONTAL
+# 6. SESSION STATE + PILIH E-WALLET
 # ------------------------------------------------------------
 for app, default in [("DANA", True), ("GoPay", True), ("ShopeePay", True)]:
     key = f"toggle_{slugify(app)}"
     if key not in st.session_state:
         st.session_state[key] = default
 
-# Judul di kiri + tiga kartu aplikasi di kanan.
-# Logo, link, dan toggle berada di dalam kartu aplikasi yang sama.
-with st.container(border=False, key="top_header"):
-    header_cols = st.columns([1.28, 0.90, 0.90, 0.90], gap="small")
+# Judul dan subjudul berada di tengah.
+st.markdown(
+    """
+    <div class="dashboard-heading-block">
+        <h1 class="dashboard-heading-title">
+            DASHBOARD KLASIFIKASI SENTIMEN<br>
+            DANA, GOPAY, & SHOPEEPAY
+        </h1>
+        <div class="dashboard-heading-subtitle">
+            Perbandingan hasil klasifikasi sentimen menggunakan
+            Multinomial Naïve Bayes (NBC) dan Support Vector Machine (SVM)
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-    with header_cols[0]:
-        st.markdown(
-            """
-            <div class="top-title-wrap">
-                <h1 class="top-title">
-                    DASHBOARD KLASIFIKASI<br>
-                    SENTIMEN DANA, GOPAY, &<br>
-                    SHOPEEPAY
-                </h1>
-                <div class="top-subtitle">
-                    Perbandingan hasil klasifikasi sentimen menggunakan
-                    Multinomial Naïve Bayes (NBC) dan Support Vector Machine (SVM)
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+# Filter aplikasi ditempatkan tepat SETELAH judul dan subjudul.
+# Fungsi toggle dan session_state tetap sama.
+selector_cols = st.columns(3, gap="medium")
 
-    for col, app in zip(header_cols[1:], APP_ORDER):
-        with col:
-            # Satu container utuh untuk logo + link + toggle.
-            with st.container(
-                border=False,
-                key=f"header_card_{slugify(app)}"
-            ):
-                logo = resolve_logo(app)
-                logo_markup = image_html(logo, f"Logo {app}")
+for col, app in zip(selector_cols, APP_ORDER):
+    with col:
+        with st.container(
+            border=False,
+            key=f"final_selector_{slugify(app)}"
+        ):
+            logo = resolve_logo(app)
+            logo_markup = image_html(logo, f"Logo {app}")
 
-                st.markdown(
-                    f'<div class="top-wallet-card">'
-                    f'<div class="top-wallet-logo">{logo_markup}</div>'
-                    f'<div class="top-wallet-links">'
-                    f'<a class="top-wallet-link" '
-                    f'href="{APP_WEBSITE_URL[app]}" target="_blank">'
-                    f'Kunjungi Website Resmi</a>'
-                    f'<a class="top-wallet-link" '
-                    f'href="{APP_PLAYSTORE_URL[app]}" target="_blank">'
-                    f'Download di Play Store</a>'
-                    f'</div>'
-                    f'</div>',
-                    unsafe_allow_html=True,
-                )
+            st.markdown(
+                f'<div class="final-wallet-card">'
+                f'<div class="final-wallet-logo">{logo_markup}</div>'
+                f'<div class="final-wallet-links">'
+                f'<a class="final-wallet-link" '
+                f'href="{APP_WEBSITE_URL[app]}" target="_blank">'
+                f'Kunjungi Website Resmi</a>'
+                f'<a class="final-wallet-link" '
+                f'href="{APP_PLAYSTORE_URL[app]}" target="_blank">'
+                f'Download di Play Store</a>'
+                f'</div>'
+                f'</div>',
+                unsafe_allow_html=True,
+            )
 
-                st.toggle(
-                    app,
-                    key=f"toggle_{slugify(app)}",
-                )
+            st.toggle(
+                app,
+                key=f"toggle_{slugify(app)}",
+            )
 
 selected_apps = [
     app for app in APP_ORDER
@@ -1610,6 +1802,11 @@ selected_apps = [
 if not selected_apps:
     st.warning("Silakan aktifkan minimal satu aplikasi E-Wallet.")
     st.stop()
+
+st.markdown(
+    '<div class="final-wallet-spacer"></div>',
+    unsafe_allow_html=True,
+)
 
 # ------------------------------------------------------------
 # 7. NAVIGASI SIDEBAR PER APLIKASI YANG DIPILIH
