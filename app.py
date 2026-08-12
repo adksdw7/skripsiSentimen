@@ -795,6 +795,158 @@ st.markdown(
 )
 
 
+
+# ------------------------------------------------------------
+# 3C. HEADER APP CARD FIX
+# Logo + links + toggle berada di dalam box yang sama
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* Tinggi judul kiri disamakan dengan kartu aplikasi kanan */
+    .top-title-wrap {
+        min-height: 158px !important;
+        height: 158px !important;
+        justify-content: center !important;
+        padding: 6px 10px 6px 2px !important;
+    }
+
+    /* Outer header tetap rapi */
+    .st-key-top_header [data-testid="stHorizontalBlock"] {
+        align-items: stretch !important;
+    }
+
+    /* Kolom aplikasi dibuat setinggi judul kiri */
+    .st-key-top_header [data-testid="stColumn"] {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    /* Container DANA / GoPay / ShopeePay = kartu sebenarnya */
+    .st-key-header_card_dana,
+    .st-key-header_card_gopay,
+    .st-key-header_card_shopeepay {
+        height: 100% !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stVerticalBlockBorderWrapper"],
+    .st-key-header_card_gopay [data-testid="stVerticalBlockBorderWrapper"],
+    .st-key-header_card_shopeepay [data-testid="stVerticalBlockBorderWrapper"] {
+        min-height: 158px !important;
+        height: 158px !important;
+        padding: 10px 10px 8px 10px !important;
+        box-sizing: border-box !important;
+
+        background: linear-gradient(
+            180deg,
+            #FFF2DB 0%,
+            #FFF5E5 45%,
+            #FFFAF3 100%
+        ) !important;
+
+        border: none !important;
+        outline: none !important;
+        border-radius: 14px !important;
+        box-shadow: 0 8px 22px rgba(117,78,42,.14) !important;
+        overflow: visible !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stVerticalBlock"],
+    .st-key-header_card_gopay [data-testid="stVerticalBlock"],
+    .st-key-header_card_shopeepay [data-testid="stVerticalBlock"] {
+        height: 100% !important;
+        gap: .28rem !important;
+        justify-content: space-between !important;
+    }
+
+    /* Hilangkan box kedua pada HTML top-wallet-card.
+       Box utamanya sekarang adalah container Streamlit di atas. */
+    .top-wallet-card {
+        min-height: auto !important;
+        height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .top-wallet-logo {
+        height: 65px !important;
+        margin: 0 0 4px 0 !important;
+    }
+
+    .top-wallet-logo img {
+        width: 62px !important;
+        height: 62px !important;
+        object-fit: contain !important;
+    }
+
+    .top-wallet-links {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 7px !important;
+        margin: 0 !important;
+    }
+
+    .top-wallet-link {
+        min-height: 27px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        padding: 5px 4px !important;
+        font-size: 7px !important;
+        line-height: 1.15 !important;
+    }
+
+    /* Toggle sekarang benar-benar berada DI DALAM kartu */
+    .st-key-header_card_dana [data-testid="stToggle"],
+    .st-key-header_card_gopay [data-testid="stToggle"],
+    .st-key-header_card_shopeepay [data-testid="stToggle"] {
+        margin: 2px 0 0 0 !important;
+        padding: 0 !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stToggle"] label,
+    .st-key-header_card_gopay [data-testid="stToggle"] label,
+    .st-key-header_card_shopeepay [data-testid="stToggle"] label {
+        margin: 0 !important;
+        padding: 0 !important;
+        min-height: 25px !important;
+    }
+
+    .st-key-header_card_dana [data-testid="stToggle"] label p,
+    .st-key-header_card_gopay [data-testid="stToggle"] label p,
+    .st-key-header_card_shopeepay [data-testid="stToggle"] label p {
+        font-size: 10px !important;
+        font-weight: 600 !important;
+        color: #9D6638 !important;
+    }
+
+    /* Supaya outer header tidak memotong shadow kartu */
+    .st-key-top_header [data-testid="stVerticalBlockBorderWrapper"] {
+        overflow: visible !important;
+    }
+
+    @media (max-width: 900px) {
+        .top-title-wrap {
+            min-height: auto !important;
+            height: auto !important;
+        }
+
+        .st-key-header_card_dana [data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-header_card_gopay [data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-header_card_shopeepay [data-testid="stVerticalBlockBorderWrapper"] {
+            min-height: 158px !important;
+            height: auto !important;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -1210,7 +1362,8 @@ for app, default in [("DANA", True), ("GoPay", True), ("ShopeePay", True)]:
     if key not in st.session_state:
         st.session_state[key] = default
 
-# Judul di kiri dan filter aplikasi di kanan dalam satu baris.
+# Judul di kiri + tiga kartu aplikasi di kanan.
+# Logo, link, dan toggle berada di dalam kartu aplikasi yang sama.
 with st.container(border=False, key="top_header"):
     header_cols = st.columns([1.58, 0.62, 0.62, 0.62], gap="small")
 
@@ -1234,26 +1387,33 @@ with st.container(border=False, key="top_header"):
 
     for col, app in zip(header_cols[1:], APP_ORDER):
         with col:
-            logo = resolve_logo(app)
-            logo_markup = image_html(logo, f"Logo {app}")
+            # Satu container utuh untuk logo + link + toggle.
+            with st.container(
+                border=False,
+                key=f"header_card_{slugify(app)}"
+            ):
+                logo = resolve_logo(app)
+                logo_markup = image_html(logo, f"Logo {app}")
 
-            st.markdown(
-                f'<div class="top-wallet-card">'
-                f'<div class="top-wallet-logo">{logo_markup}</div>'
-                f'<div class="top-wallet-links">'
-                f'<a class="top-wallet-link" href="{APP_WEBSITE_URL[app]}" '
-                f'target="_blank">Kunjungi Website Resmi</a>'
-                f'<a class="top-wallet-link" href="{APP_PLAYSTORE_URL[app]}" '
-                f'target="_blank">Download di Play Store</a>'
-                f'</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
+                st.markdown(
+                    f'<div class="top-wallet-card">'
+                    f'<div class="top-wallet-logo">{logo_markup}</div>'
+                    f'<div class="top-wallet-links">'
+                    f'<a class="top-wallet-link" '
+                    f'href="{APP_WEBSITE_URL[app]}" target="_blank">'
+                    f'Kunjungi Website Resmi</a>'
+                    f'<a class="top-wallet-link" '
+                    f'href="{APP_PLAYSTORE_URL[app]}" target="_blank">'
+                    f'Download di Play Store</a>'
+                    f'</div>'
+                    f'</div>',
+                    unsafe_allow_html=True,
+                )
 
-            st.toggle(
-                app,
-                key=f"toggle_{slugify(app)}",
-            )
+                st.toggle(
+                    app,
+                    key=f"toggle_{slugify(app)}",
+                )
 
 selected_apps = [
     app for app in APP_ORDER
