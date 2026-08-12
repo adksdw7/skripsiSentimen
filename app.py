@@ -1609,6 +1609,115 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ------------------------------------------------------------
+# 3I. FINAL POLISH (murni tambahan, tidak mengubah/menghapus
+# blok CSS manapun di atas — hanya "menang" karena posisinya
+# paling akhir sehingga override untuk properti yang sama)
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    /* -----------------------------------------------------------
+       AKAR MASALAH TEKS "double_arrow_right" / "keyboard_double_..":
+       aturan font-family Plus Jakarta Sans di section 3 ikut kena
+       ke <span> ikon Material bawaan Streamlit, jadi font ikonnya
+       ketiban font teks biasa -> ligature-nya tampil sebagai teks
+       mentah, bukan sebagai simbol panah. Baris ini mengembalikan
+       font ikon aslinya untuk SEMUA ikon Material di aplikasi.
+       ----------------------------------------------------------- */
+    [data-testid="stIconMaterial"] {
+        font-family: "Material Symbols Rounded", "Material Symbols Outlined",
+                      "Material Symbols Sharp", "Material Icons" !important;
+        color: #9D6638 !important;
+    }
+
+    /* Jaring pengaman: kalau di browser tertentu font ikon di atas
+       tetap gagal termuat, teks mentahnya disembunyikan total dan
+       diganti simbol panah kustom. Ukuran & posisi tombol asli
+       TIDAK disentuh sama sekali, supaya buka/tutup sidebar tetap
+       100% berfungsi seperti sebelumnya. */
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="collapsedControl"],
+    [data-testid="stSidebarCollapseButton"] *,
+    [data-testid="stSidebarCollapsedControl"] *,
+    [data-testid="collapsedControl"] * {
+        font-size: 0 !important;
+        color: transparent !important;
+    }
+
+    [data-testid="stSidebarCollapseButton"]::after,
+    [data-testid="stSidebarCollapseButton"] button::after,
+    button[data-testid="stSidebarCollapseButton"]::after,
+    button[aria-label="Close sidebar"]::after {
+        content: "<<" !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 20px !important;
+        font-weight: 800 !important;
+        letter-spacing: -3px !important;
+        color: #9D6638 !important;
+    }
+
+    [data-testid="stSidebarCollapsedControl"]::after,
+    [data-testid="stSidebarCollapsedControl"] button::after,
+    button[data-testid="stSidebarCollapsedControl"]::after,
+    [data-testid="collapsedControl"]::after,
+    [data-testid="collapsedControl"] button::after,
+    button[data-testid="collapsedControl"]::after,
+    button[aria-label="Open sidebar"]::after {
+        content: ">>" !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 20px !important;
+        font-weight: 800 !important;
+        letter-spacing: -3px !important;
+        color: #9D6638 !important;
+    }
+
+    /* -----------------------------------------------------------
+       NAVIGATION BAR ATAS: warna solid #FFF2DB + selalu menempel
+       di atas (sticky) walaupun halaman discroll ke bawah.
+       ----------------------------------------------------------- */
+    [data-testid="stHeader"] {
+        background: #FFF2DB !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 999999 !important;
+        width: 100% !important;
+        box-shadow: 0 2px 10px rgba(157,102,56,.10) !important;
+    }
+
+    /* -----------------------------------------------------------
+       Rapikan padding/spacing panel "Ringkasan Tren Sentimen" &
+       "Ringkasan Distribusi Sentimen" supaya isinya nyaman
+       dipandang & sejajar tinggi dengan panel chart di sebelahnya
+       (tinggi kolom sendiri sudah diatur di section 3F).
+       ----------------------------------------------------------- */
+    [class*="st-key-panel_row2_summary_"] .agreement-grid {
+        gap: 12px !important;
+    }
+
+    [class*="st-key-panel_row3_summary_"] .cm-summary-grid {
+        gap: 10px !important;
+    }
+
+    [class*="st-key-panel_row3_summary_"] .cm-row-label {
+        margin: 10px 0 8px 0 !important;
+    }
+
+    [class*="st-key-panel_row3_summary_"] .cm-row-label:first-child {
+        margin-top: 0 !important;
+    }
+
+    [class*="st-key-panel_row4_compare_"] [data-testid="stVerticalBlock"] {
+        justify-content: center !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -2091,6 +2200,7 @@ def classification_table(df, pred_col, model_name, app_name):
         use_container_width=True,
         hide_index=True,
         height=390,
+        column_order=["No.", "Ulasan", "Rating", "Klasifikasi Pengguna", f"Klasifikasi {model_name}"],
     )
 
 # ------------------------------------------------------------
@@ -2120,6 +2230,7 @@ st.markdown(
 
 # Filter aplikasi ditempatkan tepat SETELAH judul dan subjudul.
 # Fungsi toggle dan session_state tetap sama.
+st.markdown('<div id="pilih-aplikasi" style="scroll-margin-top:85px"></div>', unsafe_allow_html=True)
 selector_cols = st.columns(3, gap="medium")
 
 for col, app in zip(selector_cols, APP_ORDER):
@@ -2170,7 +2281,8 @@ st.markdown(
 # ------------------------------------------------------------
 with st.sidebar:
     st.markdown('<div class="nav-title">Navigasi Aplikasi</div>', unsafe_allow_html=True)
-    links = "".join(
+    pilih_aplikasi_link = '<a class="nav-link" href="#pilih-aplikasi" target="_self">Pilih Aplikasi</a>'
+    links = pilih_aplikasi_link + "".join(
         f'<a class="nav-link" href="#{slugify(app)}" target="_self">{app}</a>'
         for app in selected_apps
     )
