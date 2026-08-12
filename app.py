@@ -1647,10 +1647,11 @@ st.markdown(
         color: transparent !important;
     }
 
-    [data-testid="stSidebarCollapseButton"]::after,
-    [data-testid="stSidebarCollapseButton"] button::after,
-    button[data-testid="stSidebarCollapseButton"]::after,
-    button[aria-label="Close sidebar"]::after {
+    /* Catatan: ::after HANYA dipasang di elemen test-id container-nya
+       (bukan juga di "button" turunannya / aria-label), supaya tidak
+       muncul 2 simbol bertumpuk kalau Streamlit merender test-id pada
+       elemen pembungkus SEKALIGUS ada <button> di dalamnya. */
+    [data-testid="stSidebarCollapseButton"]::after {
         content: "<<" !important;
         font-family: Arial, sans-serif !important;
         font-size: 20px !important;
@@ -1660,12 +1661,7 @@ st.markdown(
     }
 
     [data-testid="stSidebarCollapsedControl"]::after,
-    [data-testid="stSidebarCollapsedControl"] button::after,
-    button[data-testid="stSidebarCollapsedControl"]::after,
-    [data-testid="collapsedControl"]::after,
-    [data-testid="collapsedControl"] button::after,
-    button[data-testid="collapsedControl"]::after,
-    button[aria-label="Open sidebar"]::after {
+    [data-testid="collapsedControl"]::after {
         content: ">>" !important;
         font-family: Arial, sans-serif !important;
         font-size: 20px !important;
@@ -1675,16 +1671,26 @@ st.markdown(
     }
 
     /* -----------------------------------------------------------
-       NAVIGATION BAR ATAS: warna solid #FFF2DB + selalu menempel
-       di atas (sticky) walaupun halaman discroll ke bawah.
+       NAVIGATION BAR ATAS: warna solid #FFF2DB + posisi fixed supaya
+       selalu menempel di atas walaupun halaman discroll ke bawah.
        ----------------------------------------------------------- */
     [data-testid="stHeader"] {
         background: #FFF2DB !important;
-        position: sticky !important;
+        position: fixed !important;
         top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
         z-index: 999999 !important;
-        width: 100% !important;
+        height: 3rem !important;
+        min-height: 3rem !important;
         box-shadow: 0 2px 10px rgba(157,102,56,.10) !important;
+    }
+
+    /* Header sekarang fixed (lepas dari alur normal halaman), jadi
+       jarak ke judul diatur manual di sini secara pas -- bukan lagi
+       dari padding-top bawaan section 3 yang tidak lagi relevan. */
+    .block-container {
+        padding-top: 3.4rem !important;
     }
 
     /* -----------------------------------------------------------
