@@ -1281,7 +1281,7 @@ with st.container(key="hasil_analisis_area"):
         /* Isi panel metrik selalu berada di tengah secara vertikal.
            Saat aplikasi bertambah, susunan tetap menyesuaikan di tengah panel. */
         .eval-cards-content {
-            min-height: 365px;
+            min-height: 390px;
             width: 100%;
             display: flex;
             flex-direction: column;
