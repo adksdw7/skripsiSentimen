@@ -18,7 +18,7 @@ st.set_page_config(
     page_title="Dashboard Klasifikasi Sentimen E-Wallet",
     page_icon="📊",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 # ------------------------------------------------------------
@@ -1342,69 +1342,59 @@ st.markdown(
         background: #FFF2DB !important;
     }
 
-    /* Paksa tombol sidebar tidak menampilkan teks icon Material */
-    [data-testid="stSidebarCollapseButton"] button,
-    [data-testid="stSidebarCollapsedControl"] button,
-    button[aria-label="Close sidebar"],
-    button[aria-label="Open sidebar"] {
-        position: relative !important;
-        width: 44px !important;
-        min-width: 44px !important;
-        height: 38px !important;
-        padding: 0 !important;
-        font-size: 0 !important;
-        color: transparent !important;
-        overflow: hidden !important;
-        border: none !important;
-        box-shadow: none !important;
-        background: rgba(255,250,243,.78) !important;
-        border-radius: 9px !important;
+    /* -----------------------------------------------------------
+       TOMBOL BUKA/TUTUP SIDEBAR
+       Hanya mengganti warna & isi ikon. Ukuran, posisi, dan area
+       klik tombol asli Streamlit TIDAK disentuh, supaya sidebar
+       selalu bisa dibuka/ditutup bebas oleh user.
+       ----------------------------------------------------------- */
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="stSidebarCollapsedControl"],
+    [data-testid="collapsedControl"] {
+        color: #9D6638 !important;
     }
 
-    [data-testid="stSidebarCollapseButton"] button *,
-    [data-testid="stSidebarCollapsedControl"] button *,
-    button[aria-label="Close sidebar"] *,
-    button[aria-label="Open sidebar"] * {
+    [data-testid="stSidebarCollapseButton"] svg,
+    [data-testid="stSidebarCollapsedControl"] svg,
+    [data-testid="collapsedControl"] svg {
         display: none !important;
-        visibility: hidden !important;
-        font-size: 0 !important;
-        color: transparent !important;
     }
 
-    /* Sidebar terbuka -> tombol penutup << */
+    /* Sidebar terbuka -> tombol penutup: << */
     [data-testid="stSidebarCollapseButton"] button::after,
+    button[data-testid="stSidebarCollapseButton"]::after,
     button[aria-label="Close sidebar"]::after {
         content: "<<" !important;
-        position: absolute !important;
-        inset: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
         font-family: Arial, sans-serif !important;
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: 800 !important;
         letter-spacing: -3px !important;
-        line-height: 1 !important;
         color: #9D6638 !important;
-        visibility: visible !important;
     }
 
-    /* Sidebar tertutup -> tombol pembuka >> */
+    /* Sidebar tertutup -> tombol pembuka: >> */
     [data-testid="stSidebarCollapsedControl"] button::after,
+    button[data-testid="stSidebarCollapsedControl"]::after,
+    [data-testid="collapsedControl"] button::after,
+    button[data-testid="collapsedControl"]::after,
     button[aria-label="Open sidebar"]::after {
         content: ">>" !important;
-        position: absolute !important;
-        inset: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
         font-family: Arial, sans-serif !important;
-        font-size: 22px !important;
+        font-size: 20px !important;
         font-weight: 800 !important;
         letter-spacing: -3px !important;
-        line-height: 1 !important;
         color: #9D6638 !important;
-        visibility: visible !important;
+    }
+
+    /* Tombol pembuka (muncul di pojok kiri atas saat sidebar tertutup)
+       diberi kotak kecil supaya terlihat jelas sebagai tombol */
+    [data-testid="stSidebarCollapsedControl"] button,
+    button[data-testid="stSidebarCollapsedControl"],
+    [data-testid="collapsedControl"] button,
+    button[data-testid="collapsedControl"] {
+        background: rgba(255, 250, 243, .85) !important;
+        border: 1.3px solid #9D6638 !important;
+        border-radius: 9px !important;
     }
 
     /* Semua kolom pada baris visualisasi stretch */
@@ -1442,10 +1432,9 @@ st.markdown(
     }
     [class*="st-key-panel_row2_"] [data-testid="stVerticalBlockBorderWrapper"] {
         min-height: 575px !important;
-        height: 575px !important;
+        height: 100% !important;
         padding: 20px 18px 24px 18px !important;
         box-sizing: border-box !important;
-        overflow: visible !important;
     }
     [class*="st-key-panel_row2_"] .sentiment-mini-grid {
         margin-top: 2px !important;
@@ -1465,7 +1454,7 @@ st.markdown(
     }
     [class*="st-key-panel_row3_"] [data-testid="stVerticalBlockBorderWrapper"] {
         min-height: 445px !important;
-        height: 445px !important;
+        height: 100% !important;
         padding: 20px 18px 22px 18px !important;
         box-sizing: border-box !important;
     }
@@ -1479,7 +1468,7 @@ st.markdown(
     }
     [class*="st-key-panel_row4_"] [data-testid="stVerticalBlockBorderWrapper"] {
         min-height: 420px !important;
-        height: 420px !important;
+        height: 100% !important;
         padding: 20px 18px 22px 18px !important;
         box-sizing: border-box !important;
     }
@@ -1492,7 +1481,7 @@ st.markdown(
     [class*="st-key-panel_row5_"] [data-testid="stVerticalBlockBorderWrapper"],
     [class*="st-key-panel_row6_"] [data-testid="stVerticalBlockBorderWrapper"] {
         min-height: 560px !important;
-        height: 560px !important;
+        height: 100% !important;
         padding: 20px 18px 22px 18px !important;
         box-sizing: border-box !important;
     }
@@ -1513,113 +1502,6 @@ st.markdown(
             min-height: auto !important;
             height: auto !important;
         }
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-# ------------------------------------------------------------
-# 3G. TOP NAVIGATION + SIDEBAR SYMBOL FINAL FIX
-# ------------------------------------------------------------
-st.markdown(
-    """
-    <style>
-    /* Top navigation/header dashboard */
-    [data-testid="stHeader"] {
-        background: #FFF2DB !important;
-    }
-
-    /* =======================================================
-       HILANGKAN MATERIAL TEXT:
-       double_arrow_right / double_arrow_left
-       ======================================================= */
-    [data-testid="stSidebarCollapsedControl"],
-    [data-testid="stSidebarCollapseButton"],
-    button[data-testid="stSidebarCollapsedControl"],
-    button[data-testid="stSidebarCollapseButton"] {
-        position: relative !important;
-        font-size: 0 !important;
-        color: transparent !important;
-        text-indent: -9999px !important;
-        overflow: hidden !important;
-    }
-
-    [data-testid="stSidebarCollapsedControl"] *,
-    [data-testid="stSidebarCollapseButton"] *,
-    button[data-testid="stSidebarCollapsedControl"] *,
-    button[data-testid="stSidebarCollapseButton"] *,
-    button[aria-label="Open sidebar"] *,
-    button[aria-label="Close sidebar"] * {
-        font-size: 0 !important;
-        color: transparent !important;
-        visibility: hidden !important;
-        text-indent: -9999px !important;
-        overflow: hidden !important;
-    }
-
-    /* Tombol pembuka sidebar: >> */
-    [data-testid="stSidebarCollapsedControl"]::after,
-    button[data-testid="stSidebarCollapsedControl"]::after,
-    button[aria-label="Open sidebar"]::after {
-        content: ">>" !important;
-        position: absolute !important;
-        inset: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        visibility: visible !important;
-        text-indent: 0 !important;
-        overflow: visible !important;
-        color: #9D6638 !important;
-        font-family: Arial, sans-serif !important;
-        font-size: 23px !important;
-        font-weight: 800 !important;
-        line-height: 1 !important;
-        letter-spacing: -3px !important;
-        z-index: 9999 !important;
-        pointer-events: none !important;
-    }
-
-    /* Tombol penutup sidebar: << */
-    [data-testid="stSidebarCollapseButton"]::after,
-    button[data-testid="stSidebarCollapseButton"]::after,
-    button[aria-label="Close sidebar"]::after {
-        content: "<<" !important;
-        position: absolute !important;
-        inset: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        visibility: visible !important;
-        text-indent: 0 !important;
-        overflow: visible !important;
-        color: #9D6638 !important;
-        font-family: Arial, sans-serif !important;
-        font-size: 23px !important;
-        font-weight: 800 !important;
-        line-height: 1 !important;
-        letter-spacing: -3px !important;
-        z-index: 9999 !important;
-        pointer-events: none !important;
-    }
-
-    /* Ukuran area klik tetap nyaman */
-    [data-testid="stSidebarCollapsedControl"],
-    [data-testid="stSidebarCollapseButton"],
-    button[data-testid="stSidebarCollapsedControl"],
-    button[data-testid="stSidebarCollapseButton"],
-    button[aria-label="Open sidebar"],
-    button[aria-label="Close sidebar"] {
-        min-width: 44px !important;
-        width: 44px !important;
-        min-height: 38px !important;
-        height: 38px !important;
-        padding: 0 !important;
-        border: none !important;
-        box-shadow: none !important;
-        background: transparent !important;
     }
     </style>
     """,
