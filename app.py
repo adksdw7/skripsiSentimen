@@ -440,357 +440,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
-st.markdown(
-    """
-    <style>
-    /* ============================================================
-       HEADER HORIZONTAL: TITLE + 3 FILTER APLIKASI
-       ============================================================ */
-    .top-title-wrap {
-        height: 100%;
-        min-height: 128px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        padding: 4px 8px 4px 2px;
-        box-sizing: border-box;
-    }
-
-    .top-title {
-        margin: 0 !important;
-        color: #9D6638 !important;
-        font-weight: 800 !important;
-        font-size: clamp(25px, 2.45vw, 42px) !important;
-        line-height: 1.12 !important;
-        letter-spacing: -0.025em !important;
-    }
-
-    .top-subtitle {
-        margin: 7px 0 0 0;
-        color: #9D6638 !important;
-        font-size: clamp(8px, .72vw, 11px);
-        line-height: 1.35;
-    }
-
-    .top-wallet-card {
-        width: 100%;
-        min-height: 98px;
-        box-sizing: border-box;
-        background: #FFFAF3;
-        border: 1px solid #9D6638;
-        border-radius: 11px;
-        padding: 8px 6px 6px 6px;
-        box-shadow: 0 3px 9px rgba(157, 102, 56, .07);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .top-wallet-logo {
-        height: 53px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 5px;
-    }
-
-    .top-wallet-logo img {
-        width: 52px;
-        height: 52px;
-        object-fit: contain;
-        border-radius: 6px;
-    }
-
-    .top-wallet-links {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 4px;
-    }
-
-    .top-wallet-link {
-        display: block;
-        min-width: 0;
-        border: 1px solid rgba(157,102,56,.75);
-        border-radius: 6px;
-        padding: 4px 2px;
-        background: #FFF2DB;
-        color: #9D6638 !important;
-        text-decoration: none !important;
-        text-align: center;
-        font-size: clamp(6px, .48vw, 8px);
-        line-height: 1.15;
-        font-weight: 600;
-    }
-
-    .st-key-top_header [data-testid="stVerticalBlockBorderWrapper"] {
-        padding: 10px 12px !important;
-        background: #FFFAF3 !important;
-        border: 1.5px solid #9D6638 !important;
-        border-radius: 14px !important;
-        box-shadow: 0 4px 13px rgba(157, 102, 56, .08) !important;
-    }
-
-    .st-key-top_header [data-testid="stHorizontalBlock"] {
-        align-items: center !important;
-    }
-
-    .st-key-top_header [data-testid="stVerticalBlock"] {
-        gap: .30rem !important;
-    }
-
-    .st-key-top_header [data-testid="stToggle"] {
-        margin-top: -1px !important;
-        margin-bottom: -6px !important;
-    }
-
-    .st-key-top_header [data-testid="stToggle"] label p {
-        font-size: 9px !important;
-        font-weight: 700 !important;
-    }
-
-    @media (max-width: 900px) {
-        .top-title-wrap {
-            min-height: auto;
-            padding: 6px 2px 10px 2px;
-        }
-
-        .top-title {
-            font-size: clamp(25px, 7vw, 36px) !important;
-        }
-
-        .top-wallet-card {
-            min-height: 105px;
-        }
-
-        .top-wallet-link {
-            font-size: 8px;
-        }
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-
-# ============================================================
-# FINAL VISUAL OVERRIDE — GRADIENT + SHADOW UNTUK SEMUA BOX
-# ============================================================
-st.markdown(
-    """
-    <style>
-    :root {
-        --dashboard-bg: #FFF2DB;
-        --box-top: #FFF2DB;
-        --box-bottom: #FFFAF3;
-        --box-border: #9D6638;
-        --box-shadow: 0 7px 18px rgba(157, 102, 56, 0.16);
-        --box-shadow-soft: 0 5px 14px rgba(157, 102, 56, 0.13);
-    }
-
-    html,
-    body,
-    .stApp,
-    [data-testid="stAppViewContainer"] {
-        background: var(--dashboard-bg) !important;
-    }
-
-    [data-testid="stHeader"] {
-        background: rgba(255, 242, 219, 0.96) !important;
-    }
-
-    /* Semua panel/container utama */
-    [data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(
-            180deg,
-            var(--box-top) 0%,
-            #FFF4E1 24%,
-            #FFF6E8 50%,
-            #FFF8EF 76%,
-            var(--box-bottom) 100%
-        ) !important;
-        border: 1.25px solid var(--box-border) !important;
-        border-radius: 14px !important;
-        box-shadow: var(--box-shadow) !important;
-    }
-
-    /* Header horizontal */
-    .st-key-top_header [data-testid="stVerticalBlockBorderWrapper"] {
-        background: linear-gradient(
-            180deg,
-            var(--box-top) 0%,
-            #FFF4E1 24%,
-            #FFF6E8 50%,
-            #FFF8EF 76%,
-            var(--box-bottom) 100%
-        ) !important;
-        border: 1.35px solid var(--box-border) !important;
-        border-radius: 15px !important;
-        box-shadow: 0 8px 20px rgba(157, 102, 56, 0.17) !important;
-    }
-
-    /* Kartu filter aplikasi */
-    .top-wallet-card,
-    .wallet-card {
-        background: linear-gradient(
-            180deg,
-            var(--box-top) 0%,
-            #FFF4E1 25%,
-            #FFF6E8 52%,
-            #FFF8EF 78%,
-            var(--box-bottom) 100%
-        ) !important;
-        border: 1.15px solid var(--box-border) !important;
-        box-shadow: var(--box-shadow-soft) !important;
-    }
-
-    .top-wallet-link,
-    .wallet-link {
-        background: linear-gradient(
-            180deg,
-            #FFF2DB 0%,
-            #FFF7EB 60%,
-            #FFFAF3 100%
-        ) !important;
-        border: 1px solid rgba(157, 102, 56, 0.82) !important;
-        box-shadow: 0 2px 6px rgba(157, 102, 56, 0.10) !important;
-    }
-
-    /* Semua box KPI / ringkasan */
-    .kpi-card,
-    .sentiment-mini,
-    .agreement-card,
-    .cm-box,
-    .metric-box,
-    .metric-card,
-    .dataset-app-panel,
-    .dataset-metric-card,
-    .compare-kpi,
-    .insight-card,
-    .note-box {
-        background: linear-gradient(
-            180deg,
-            var(--box-top) 0%,
-            #FFF4E1 24%,
-            #FFF6E8 50%,
-            #FFF8EF 76%,
-            var(--box-bottom) 100%
-        ) !important;
-        border-color: var(--box-border) !important;
-        box-shadow: var(--box-shadow-soft) !important;
-    }
-
-    .kpi-card,
-    .sentiment-mini,
-    .agreement-card,
-    .cm-box,
-    .metric-box {
-        border: 1px solid var(--box-border) !important;
-    }
-
-    .cm-note {
-        background: linear-gradient(
-            180deg,
-            #FFF2DB 0%,
-            #FFF7EB 58%,
-            #FFFAF3 100%
-        ) !important;
-        border: 1px dashed var(--box-border) !important;
-        box-shadow: 0 3px 9px rgba(157, 102, 56, 0.11) !important;
-    }
-
-    /* Dataframe */
-    [data-testid="stDataFrame"] {
-        background: linear-gradient(
-            180deg,
-            var(--box-top) 0%,
-            var(--box-bottom) 100%
-        ) !important;
-        border: 1px solid var(--box-border) !important;
-        border-radius: 11px !important;
-        box-shadow: var(--box-shadow-soft) !important;
-        overflow: hidden !important;
-    }
-
-    /* Selectbox */
-    [data-baseweb="select"] > div,
-    [data-testid="stSelectbox"] > div > div {
-        background: linear-gradient(
-            180deg,
-            #FFF2DB 0%,
-            #FFFAF3 100%
-        ) !important;
-        border-color: var(--box-border) !important;
-        box-shadow: 0 3px 9px rgba(157, 102, 56, 0.10) !important;
-    }
-
-    /* Alert */
-    [data-testid="stAlert"],
-    [data-testid="stAlertContainer"] {
-        background: linear-gradient(
-            180deg,
-            var(--box-top) 0%,
-            var(--box-bottom) 100%
-        ) !important;
-        border-color: var(--box-border) !important;
-        box-shadow: var(--box-shadow-soft) !important;
-        border-radius: 11px !important;
-    }
-
-    /* Sidebar navigation */
-    .nav-link {
-        background: linear-gradient(
-            180deg,
-            #FFF2DB 0%,
-            #FFF7EB 60%,
-            #FFFAF3 100%
-        ) !important;
-        border: 1px solid var(--box-border) !important;
-        box-shadow: 0 3px 8px rgba(157, 102, 56, 0.10) !important;
-    }
-
-    .nav-link:hover {
-        background: linear-gradient(
-            180deg,
-            #F8E5C7 0%,
-            #FFF2DB 55%,
-            #FFFAF3 100%
-        ) !important;
-        transform: translateY(-1px);
-    }
-
-    /* Plotly transparan agar gradient box luar tetap terlihat */
-    [data-testid="stPlotlyChart"],
-    [data-testid="stPlotlyChart"] > div {
-        background: transparent !important;
-    }
-
-    hr,
-    .app-divider {
-        background: var(--box-border) !important;
-        border-color: var(--box-border) !important;
-        opacity: 0.42 !important;
-    }
-
-    @media (max-width: 900px) {
-        [data-testid="stVerticalBlockBorderWrapper"],
-        .top-wallet-card,
-        .wallet-card,
-        .kpi-card,
-        .sentiment-mini,
-        .agreement-card,
-        .cm-box,
-        .metric-box {
-            box-shadow: 0 5px 13px rgba(157, 102, 56, 0.14) !important;
-        }
-    }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -1199,63 +848,47 @@ def classification_table(df, pred_col, model_name, app_name):
     )
 
 # ------------------------------------------------------------
-# 6. SESSION STATE + HEADER / FILTER E-WALLET HORIZONTAL
+# 6. SESSION STATE + PILIH E-WALLET
 # ------------------------------------------------------------
 for app, default in [("DANA", True), ("GoPay", True), ("ShopeePay", True)]:
     key = f"toggle_{slugify(app)}"
     if key not in st.session_state:
         st.session_state[key] = default
 
-# Judul dan filter aplikasi berada dalam SATU BARIS.
-with st.container(border=True, key="top_header"):
-    header_cols = st.columns([1.58, 0.62, 0.62, 0.62], gap="small")
+st.markdown(
+    """
+    <div class="hero">
+        <h1>DASHBOARD KLASIFIKASI<br>SENTIMEN DANA, GOPAY, & SHOPEEPAY</h1>
+        <p>
+            Perbandingan hasil klasifikasi sentimen menggunakan
+            <span class="model-nbc"><b>Multinomial Naïve Bayes (NBC)</b></span>
+            dan
+            <span class="model-svm"><b>Support Vector Machine (SVM)</b></span>.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-    with header_cols[0]:
+st.markdown('<h2 class="section-title">Pilih E-Wallet</h2>', unsafe_allow_html=True)
+wallet_cols = st.columns(3, gap="medium")
+
+for col, app in zip(wallet_cols, APP_ORDER):
+    with col:
+        logo = resolve_logo(app)
+        logo_markup = image_html(logo, f"Logo {app}")
         st.markdown(
-            """
-            <div class="top-title-wrap">
-                <h1 class="top-title">
-                    DASHBOARD KLASIFIKASI<br>
-                    SENTIMEN DANA, GOPAY, &<br>
-                    SHOPEEPAY
-                </h1>
-                <div class="top-subtitle">
-                    Klasifikasi sentimen menggunakan Multinomial Naïve Bayes (NBC)
-                    dan Support Vector Machine (SVM)
-                </div>
-            </div>
-            """,
+            f'<div class="wallet-card">'
+            f'<div class="wallet-logo">{logo_markup}</div>'
+            f'<div class="wallet-links">'
+            f'<a class="wallet-link" href="{APP_WEBSITE_URL[app]}" target="_blank">Website Resmi</a>'
+            f'<a class="wallet-link" href="{APP_PLAYSTORE_URL[app]}" target="_blank">Play Store</a>'
+            f'</div></div>',
             unsafe_allow_html=True,
         )
+        st.toggle(app, key=f"toggle_{slugify(app)}")
 
-    for col, app in zip(header_cols[1:], APP_ORDER):
-        with col:
-            logo = resolve_logo(app)
-            logo_markup = image_html(logo, f"Logo {app}")
-
-            st.markdown(
-                f'<div class="top-wallet-card">'
-                f'<div class="top-wallet-logo">{logo_markup}</div>'
-                f'<div class="top-wallet-links">'
-                f'<a class="top-wallet-link" href="{APP_WEBSITE_URL[app]}" '
-                f'target="_blank">Kunjungi Website Resmi</a>'
-                f'<a class="top-wallet-link" href="{APP_PLAYSTORE_URL[app]}" '
-                f'target="_blank">Download di Play Store</a>'
-                f'</div>'
-                f'</div>',
-                unsafe_allow_html=True,
-            )
-
-            st.toggle(
-                app,
-                key=f"toggle_{slugify(app)}",
-            )
-
-selected_apps = [
-    app
-    for app in APP_ORDER
-    if st.session_state[f"toggle_{slugify(app)}"]
-]
+selected_apps = [app for app in APP_ORDER if st.session_state[f"toggle_{slugify(app)}"]]
 
 if not selected_apps:
     st.warning("Silakan aktifkan minimal satu aplikasi E-Wallet.")
