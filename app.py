@@ -1626,6 +1626,106 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
+# ------------------------------------------------------------
+# 3H. PERFORMANCE WINNER CARDS
+# ------------------------------------------------------------
+st.markdown(
+    """
+    <style>
+    .performance-winner-grid {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 12px;
+        align-items: stretch;
+        margin-top: 14px;
+        padding: 2px 4px 4px 4px;
+        box-sizing: border-box;
+    }
+
+    .performance-winner-card {
+        grid-column: span 2;
+        min-height: 118px;
+        border-radius: 12px;
+        background: linear-gradient(
+            180deg,
+            #FFF2DB 0%,
+            #FFF6E8 55%,
+            #FFFAF3 100%
+        );
+        box-shadow: 0 5px 14px rgba(117,78,42,.11);
+        padding: 14px 9px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* Dua kartu terakhir dibuat center pada baris kedua */
+    .performance-winner-card:nth-child(4) {
+        grid-column: 2 / span 2;
+    }
+
+    .performance-winner-card:nth-child(5) {
+        grid-column: 4 / span 2;
+    }
+
+    .performance-metric-name {
+        font-size: 10px;
+        line-height: 1.2;
+        color: #9D6638;
+        margin-bottom: 8px;
+        font-weight: 500;
+    }
+
+    .performance-winner-name {
+        font-size: clamp(21px, 1.65vw, 30px);
+        line-height: 1;
+        font-weight: 800;
+        margin-bottom: 8px;
+    }
+
+    .performance-score-line {
+        font-size: 8px;
+        line-height: 1.35;
+        color: #9D6638;
+        white-space: nowrap;
+    }
+
+    .performance-winner-caption {
+        width: 100%;
+        text-align: center;
+        margin-top: 14px;
+        font-size: 10px;
+        line-height: 1.4;
+        color: #9D6638;
+    }
+
+    @media (max-width: 1100px) {
+        .performance-winner-grid {
+            grid-template-columns: repeat(2, minmax(0,1fr));
+        }
+
+        .performance-winner-card,
+        .performance-winner-card:nth-child(4),
+        .performance-winner-card:nth-child(5) {
+            grid-column: auto;
+        }
+
+        .performance-winner-card:nth-child(5) {
+            grid-column: 1 / span 2;
+            width: calc(50% - 6px);
+            justify-self: center;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 # ------------------------------------------------------------
 # 4. LOAD & VALIDASI DATA
 # ------------------------------------------------------------
@@ -2301,20 +2401,44 @@ for selected_app in APP_ORDER:
         with st.container(border=True, key=f"panel_row4_compare_{slugify(selected_app)}"):
             st.markdown('<div class="panel-title">Perbandingan Kinerja</div>', unsafe_allow_html=True)
 
-            perf_table = pd.DataFrame({
-                "Metrik": METRIC_ORDER,
-                "Unggul": [
-                    "NBC" if float(row_nbc[m]) > float(row_svm[m])
-                    else ("SVM" if float(row_svm[m]) > float(row_nbc[m]) else "Sama")
-                    for m in METRIC_ORDER
-                ],
-            })
+            winner_cards = []
 
-            st.dataframe(
-                perf_table,
-                use_container_width=True,
-                hide_index=True,
-                height=260,
+            for metric_name in METRIC_ORDER:
+                nbc_value = float(row_nbc[metric_name])
+                svm_value = float(row_svm[metric_name])
+
+                if nbc_value > svm_value:
+                    winner = "NBC"
+                    winner_color = NBC
+                elif svm_value > nbc_value:
+                    winner = "SVM"
+                    winner_color = SVM
+                else:
+                    winner = "Sama"
+                    winner_color = TEXT
+
+                winner_cards.append(
+                    f'<div class="performance-winner-card">'
+                    f'<div class="performance-metric-name">{metric_name}</div>'
+                    f'<div class="performance-winner-name" '
+                    f'style="color:{winner_color};">{winner}</div>'
+                    f'<div class="performance-score-line">'
+                    f'<span style="color:{NBC};">NBC {nbc_value*100:.2f}%</span>'
+                    f' &nbsp;•&nbsp; '
+                    f'<span style="color:{SVM};">SVM {svm_value*100:.2f}%</span>'
+                    f'</div>'
+                    f'</div>'
+                )
+
+            st.markdown(
+                '<div class="performance-winner-grid">'
+                + ''.join(winner_cards)
+                + '</div>'
+                '<div class="performance-winner-caption">'
+                'Model yang ditampilkan pada setiap kartu adalah model dengan nilai '
+                'metrik evaluasi lebih tinggi.'
+                '</div>',
+                unsafe_allow_html=True,
             )
 
     # --------------------------------------------------------
