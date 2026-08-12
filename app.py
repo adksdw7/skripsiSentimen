@@ -578,6 +578,7 @@ label_evaluasi_sidebar = (
 NAV_ITEMS = [
     ("Pilih E-Wallet", "pilih-e-wallet"),
     ("Pilih Model", "hasil-analisis"),
+    ("Pilih Model", "pilih-model"),
     ("Proporsi Distribusi Sentimen Pengguna", "proporsi-sentimen"),
     ("Grafik Tren Perkembangan Sentimen Bulanan", "tren-sentimen"),
     ("Penyebaran Distribusi Rating Bintang Pengguna", "distribusi-rating"),
@@ -816,6 +817,11 @@ with st.container(key="hasil_analisis_area"):
 
 
     # Pilih model klasifikasi
+    st.markdown(
+        '<div id="pilih-model" class="section-anchor"></div>',
+        unsafe_allow_html=True
+    )
+
     model_sebelum = st.session_state["model_pilihan"]
 
     nbc_border = "#2377ca" if model_sebelum == "NBC" else "#d7dce2"
@@ -1406,152 +1412,7 @@ with st.container(key="hasil_analisis_area"):
         "F1-Score"
     ]
 
-    # Bagian atas: diagram batang interaktif + kartu metrik per aplikasi
-    # Kedua panel dibuat sama lebar.
-    col_eval_chart, col_eval_cards = st.columns([1, 1], gap="medium")
-
-    with col_eval_chart:
-        with st.container(border=True, key="eval_chart_panel"):
-            st.markdown(
-                f'<div class="eval-panel-title">Perbandingan Metrik Evaluasi {nama_model}</div>',
-                unsafe_allow_html=True
-            )
-
-            df_eval_bar = df_eval_selected[
-                ["aplikasi"] + metric_order
-            ].melt(
-                id_vars="aplikasi",
-                value_vars=metric_order,
-                var_name="Metrik",
-                value_name="Nilai"
-            )
-
-            df_eval_bar["NilaiPersen"] = df_eval_bar["Nilai"] * 100
-            df_eval_bar["Label"] = df_eval_bar["NilaiPersen"].map(
-                lambda x: f"{x:.1f}%"
-            )
-
-            fig_eval_bar = px.bar(
-                df_eval_bar,
-                x="Metrik",
-                y="NilaiPersen",
-                color="aplikasi",
-                barmode="group",
-                text="Label",
-                category_orders={
-                    "Metrik": metric_order,
-                    "aplikasi": [
-                        app for app in ["DANA", "GoPay", "ShopeePay"]
-                        if app in selected_apps
-                    ]
-                },
-                color_discrete_map=APP_COLOR_MAP,
-                labels={
-                    "NilaiPersen": "Nilai (%)",
-                    "Metrik": "",
-                    "aplikasi": "Aplikasi"
-                }
-            )
-
-            fig_eval_bar.update_traces(
-                textposition="outside",
-                cliponaxis=False,
-                hovertemplate=(
-                    "<b>%{fullData.name}</b><br>"
-                    "Metrik: %{x}<br>"
-                    "Nilai: %{y:.2f}%"
-                    "<extra></extra>"
-                )
-            )
-
-            fig_eval_bar.update_layout(
-                autosize=True,
-                height=420,
-                margin=dict(t=25, b=45, l=55, r=20),
-                paper_bgcolor="rgba(0,0,0,0)",
-                plot_bgcolor="rgba(0,0,0,0)",
-                font=dict(size=11, color="#222222"),
-                legend_title_text="",
-                legend=dict(
-                    orientation="h",
-                    yanchor="bottom",
-                    y=1.02,
-                    xanchor="left",
-                    x=0
-                ),
-                yaxis=dict(
-                    range=[0, 108],
-                    ticksuffix="%",
-                    gridcolor="rgba(0,0,0,0.08)",
-                    zeroline=False
-                ),
-                xaxis=dict(
-                    tickangle=0,
-                    fixedrange=True
-                ),
-                bargap=0.18,
-                bargroupgap=0.04
-            )
-
-            st.plotly_chart(
-                fig_eval_bar,
-                use_container_width=True,
-                config={
-                    **PLOTLY_CONFIG,
-                    "modeBarButtonsToRemove": [
-                        "lasso2d",
-                        "select2d"
-                    ]
-                }
-            )
-
-    with col_eval_cards:
-        with st.container(border=True, key="eval_cards_panel"):
-            st.markdown(
-                '<div class="eval-panel-title">Metrik Evaluasi per Aplikasi</div>',
-                unsafe_allow_html=True
-            )
-
-            # Seluruh isi aplikasi dibuat sebagai satu blok agar dapat
-            # dipusatkan secara vertikal di dalam panel kanan.
-            eval_apps_html = '<div class="eval-cards-content">'
-
-            for app_name in selected_apps:
-                row_eval = df_eval_selected[
-                    df_eval_selected["aplikasi"] == app_name
-                ]
-
-                if row_eval.empty:
-                    continue
-
-                row_eval = row_eval.iloc[0]
-                app_color = APP_COLOR_MAP[app_name]
-
-                metric_cards = "".join(
-                    f'<div class="eval-metric-card" style="--metric-color:{app_color};">'
-                    f'<p class="eval-metric-label">{metric_name}</p>'
-                    f'<p class="eval-metric-value">{float(row_eval[metric_name]) * 100:.2f}%</p>'
-                    f'</div>'
-                    for metric_name in metric_order
-                )
-
-                eval_apps_html += (
-                    f'<div class="eval-app-block">'
-                    f'<div class="eval-app-title">Metrik Evaluasi: {app_name}</div>'
-                    f'<div class="eval-metric-grid">{metric_cards}</div>'
-                    f'</div>'
-                )
-
-            eval_apps_html += '</div>'
-
-            st.markdown(
-                eval_apps_html,
-                unsafe_allow_html=True
-            )
-
-    # Jarak antara ringkasan evaluasi dan confusion matrix
-    st.markdown('<div style="height:10px;"></div>', unsafe_allow_html=True)
-
+    # Confusion matrix ditampilkan lebih dahulu sebelum ringkasan metrik.
     # Posisi confusion matrix dibuat center-aligned secara dinamis.
     # 1 aplikasi: satu matrix tepat di tengah.
     # 2 aplikasi: dua matrix tetap membentuk grup di tengah.
@@ -1694,3 +1555,154 @@ with st.container(key="hasil_analisis_area"):
         '<div class="eval-note">Warna lebih pekat menunjukkan klasifikasi benar (TP dan TN), sedangkan warna lebih muda menunjukkan kesalahan klasifikasi (FP dan FN).</div>',
         unsafe_allow_html=True
     )
+
+    # Jarak antara confusion matrix dan ringkasan evaluasi
+    st.markdown(
+        '<div style="height:14px;"></div>',
+        unsafe_allow_html=True
+    )
+
+    # Ringkasan evaluasi: diagram batang interaktif + kartu metrik per aplikasi
+    # Kedua panel dibuat sama lebar.
+    col_eval_chart, col_eval_cards = st.columns([1, 1], gap="medium")
+
+    with col_eval_chart:
+        with st.container(border=True, key="eval_chart_panel"):
+            st.markdown(
+                f'<div class="eval-panel-title">Perbandingan Metrik Evaluasi {nama_model}</div>',
+                unsafe_allow_html=True
+            )
+
+            df_eval_bar = df_eval_selected[
+                ["aplikasi"] + metric_order
+            ].melt(
+                id_vars="aplikasi",
+                value_vars=metric_order,
+                var_name="Metrik",
+                value_name="Nilai"
+            )
+
+            # Diagram batang menggunakan nilai asli dari file evaluasi
+            # (0-1), bukan persentase, karena persentase sudah dirangkum
+            # pada kartu Metrik Evaluasi per Aplikasi.
+            df_eval_bar["Label"] = df_eval_bar["Nilai"].map(
+                lambda x: f"{x:.4f}"
+            )
+
+            fig_eval_bar = px.bar(
+                df_eval_bar,
+                x="Metrik",
+                y="Nilai",
+                color="aplikasi",
+                barmode="group",
+                text="Label",
+                category_orders={
+                    "Metrik": metric_order,
+                    "aplikasi": [
+                        app for app in ["DANA", "GoPay", "ShopeePay"]
+                        if app in selected_apps
+                    ]
+                },
+                color_discrete_map=APP_COLOR_MAP,
+                labels={
+                    "Nilai": "Nilai",
+                    "Metrik": "",
+                    "aplikasi": "Aplikasi"
+                }
+            )
+
+            fig_eval_bar.update_traces(
+                textposition="outside",
+                cliponaxis=False,
+                hovertemplate=(
+                    "<b>%{fullData.name}</b><br>"
+                    "Metrik: %{x}<br>"
+                    "Nilai: %{y:.4f}"
+                    "<extra></extra>"
+                )
+            )
+
+            fig_eval_bar.update_layout(
+                autosize=True,
+                height=420,
+                margin=dict(t=25, b=45, l=55, r=20),
+                paper_bgcolor="rgba(0,0,0,0)",
+                plot_bgcolor="rgba(0,0,0,0)",
+                font=dict(size=11, color="#222222"),
+                legend_title_text="",
+                legend=dict(
+                    orientation="h",
+                    yanchor="bottom",
+                    y=1.02,
+                    xanchor="left",
+                    x=0
+                ),
+                yaxis=dict(
+                    range=[0, 1.08],
+                    tickformat=".2f",
+                    gridcolor="rgba(0,0,0,0.08)",
+                    zeroline=False
+                ),
+                xaxis=dict(
+                    tickangle=0,
+                    fixedrange=True
+                ),
+                bargap=0.18,
+                bargroupgap=0.04
+            )
+
+            st.plotly_chart(
+                fig_eval_bar,
+                use_container_width=True,
+                config={
+                    **PLOTLY_CONFIG,
+                    "modeBarButtonsToRemove": [
+                        "lasso2d",
+                        "select2d"
+                    ]
+                }
+            )
+
+    with col_eval_cards:
+        with st.container(border=True, key="eval_cards_panel"):
+            st.markdown(
+                '<div class="eval-panel-title">Metrik Evaluasi per Aplikasi</div>',
+                unsafe_allow_html=True
+            )
+
+            # Seluruh isi aplikasi dibuat sebagai satu blok agar dapat
+            # dipusatkan secara vertikal di dalam panel kanan.
+            eval_apps_html = '<div class="eval-cards-content">'
+
+            for app_name in selected_apps:
+                row_eval = df_eval_selected[
+                    df_eval_selected["aplikasi"] == app_name
+                ]
+
+                if row_eval.empty:
+                    continue
+
+                row_eval = row_eval.iloc[0]
+                app_color = APP_COLOR_MAP[app_name]
+
+                metric_cards = "".join(
+                    f'<div class="eval-metric-card" style="--metric-color:{app_color};">'
+                    f'<p class="eval-metric-label">{metric_name}</p>'
+                    f'<p class="eval-metric-value">{float(row_eval[metric_name]) * 100:.2f}%</p>'
+                    f'</div>'
+                    for metric_name in metric_order
+                )
+
+                eval_apps_html += (
+                    f'<div class="eval-app-block">'
+                    f'<div class="eval-app-title">Metrik Evaluasi: {app_name}</div>'
+                    f'<div class="eval-metric-grid">{metric_cards}</div>'
+                    f'</div>'
+                )
+
+            eval_apps_html += '</div>'
+
+            st.markdown(
+                eval_apps_html,
+                unsafe_allow_html=True
+            )
